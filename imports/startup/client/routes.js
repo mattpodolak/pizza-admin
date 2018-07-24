@@ -1,5 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
+import { Router } from 'meteor/iron:router'
 
 // Import needed templates
 import '../../ui/layouts/body/body.js';
@@ -19,3 +20,7 @@ FlowRouter.notFound = {
     BlazeLayout.render('App_body', { main: 'App_notFound' });
   },
 };
+
+Router.route('/test', function () {
+  this.render('App_body', {main: 'App_test'});
+});
