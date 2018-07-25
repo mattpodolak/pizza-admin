@@ -15,12 +15,13 @@ FlowRouter.route('/', {
   },
 });
 
+Router.route('/test', function () {
+  this.render('App_body', {main: 'App_test'});
+});
+
 FlowRouter.notFound = {
   action() {
     BlazeLayout.render('App_body', { main: 'App_notFound' });
   },
 };
 
-Router.route('/test', function () {
-  this.render('App_body', {main: 'App_test'});
-});
