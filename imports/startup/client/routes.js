@@ -6,6 +6,7 @@ import { Router } from 'meteor/iron:router'
 import '../../ui/layouts/body/body.js';
 import '../../ui/pages/home/home.js';
 import '../../ui/pages/not-found/not-found.js';
+import '../../ui/pages/test/test.js';
 
 // Set up all routes in the app
 FlowRouter.route('/', {
@@ -15,13 +16,14 @@ FlowRouter.route('/', {
   },
 });
 
-Router.route('/test', function () {
-  this.render('App_body', {main: 'App_test'});
+Router.route('/test',{
+  name: 'App.test',
+  template: 'App_test'
 });
 
-FlowRouter.notFound = {
-  action() {
-    BlazeLayout.render('App_body', { main: 'App_notFound' });
-  },
-};
+// FlowRouter.notFound = {
+//   action() {
+//     BlazeLayout.render('App_body', { main: 'App_notFound' });
+//   },
+// };
 
