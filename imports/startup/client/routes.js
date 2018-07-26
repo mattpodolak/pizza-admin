@@ -43,6 +43,11 @@ Router.route('/login', {
   template: 'App_login'
 });
 
+Router.route('/register', {
+  name: 'App.register',
+  template: 'App_register'
+});
+
 
 // FlowRouter.notFound = {
 //   action() {

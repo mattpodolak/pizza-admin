@@ -3,13 +3,13 @@
         <li>PIZZA CONSOLE: </li>
         <li><a href="{{pathFor route='App.home'}}">Home</a></li>
         <li><a href="{{pathFor route='App.customers'}}">Customers</a></li>
-        <li><a href="{{pathFor route='App_orders'}}">Order History</a></li>
-        <li><a href="{{pathFor route='App_stats'}}">Stats</a></li>
+        <li><a href="{{pathFor route='App.orders'}}">Order History</a></li>
+        <li><a href="{{pathFor route='App.stats'}}">Stats</a></li>
         {{#if currentUser}}
             <li><a href="#" class="logout">Logout</a></li>
         {{else}}
-            <li><a href="{{pathFor route='App_register'}}">Register</a></li>
-            <li><a href="{{pathFor route='App_login'}}">Login</a></li>
+            <li><a href="{{pathFor route='App.register'}}">Register</a></li>
+            <li><a href="{{pathFor route='App.login'}}">Login</a></li>
         {{/if}}
     </ul>
 </template>
