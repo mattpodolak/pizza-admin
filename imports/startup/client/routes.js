@@ -7,6 +7,7 @@ import '../../ui/layouts/body/body.js';
 import '../../ui/pages/home/home.js';
 import '../../ui/pages/not-found/not-found.js';
 import '../../ui/pages/test/test.js';
+import '../../ui/pages/customers/customers.js';
 
 //header and footer 
 Router.configure({
@@ -14,11 +15,14 @@ Router.configure({
 });
 
 // Set up all routes in the app
-FlowRouter.route('/', {
+Router.route('/', {
   name: 'App.home',
-  action() {
-    BlazeLayout.render('App_body', { main: 'App_home' });
-  },
+  template: 'App_home'
+});
+
+Router.route('/customers', {
+  name: 'App.customers',
+  template: 'App_customers'
 });
 
 Router.route('/test',{

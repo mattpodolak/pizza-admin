@@ -1,0 +1,13 @@
+<template name="App_customers">
+    <div class="container">
+        <header>
+            <h1>Customer List</h1>
+        </header>
+       
+        <div class="customer">
+            {{#each customerList}}
+                {{> customer}}
+            {{/each}}
+        </div>
+    </div>
+</template>       
