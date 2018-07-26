@@ -11,6 +11,6 @@ Template.App_register.events({
             email: email,
             password: password
         });
-        Router.go('App_customers');
+        Router.go('App.customers');
     }
 });

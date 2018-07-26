@@ -1,5 +1,3 @@
-// import { FlowRouter } from 'meteor/kadira:flow-router';
-// import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { Router } from 'meteor/iron:router'
 
 // Import needed templates
@@ -8,50 +6,51 @@ import '../../ui/pages/home/home.js';
 import '../../ui/pages/customers/customers.js';
 import '../../ui/pages/not-found/not-found.js';
 import '../../ui/pages/login/login.js';
+import '../../ui/pages/register/register.js';
 
-//header and footer 
+
 Router.configure({
-  layoutTemplate: 'App_body',
+
   noRoutesTemplate: 'App_notFound'
 });
 
-// Set up all routes in the app
-// FlowRouter.route('/', {
-//   name: 'App.home',
-//   action() {
-//     BlazeLayout.render('App_body', { main: 'App_home' });
-//   },
-// });
-
-Router.route('/', {
-  name: 'App.home',
-  template: 'App_customers'
+Router.route('/home', function () {
+  // use the template named App_body for our layout
+  this.layout('App_body');
+  this.name('App.home')
+  // {{> yield}}
+  this.render('App_customers');
 });
 
-Router.route('/home', {
-  name: 'App.home2',
-  template: 'App_customers'
+Router.route('/', function () {
+  // use the template named App_body for our layout
+  this.layout('App_body');
+  this.name('App.home2')
+  // {{> yield}}
+  this.render('App_customers');
 });
 
-Router.route('/customers', {
-  name: 'App.customers',
-  template: 'App_customers'
+Router.route('/customers', function () {
+  // use the template named App_body for our layout
+  this.layout('App_body');
+  this.name('App.customers')
+  // {{> yield}}
+  this.render('App_customers');
 });
 
-Router.route('/login', {
-  name: 'App.login',
-  template: 'App_login'
+Router.route('/login', function () {
+  // use the template named App_body for our layout
+  this.layout('App_body');
+  this.name('App.login')
+  // {{> yield}}
+  this.render('App_login');
 });
 
-Router.route('/register', {
-  name: 'App.register',
-  template: 'App_register'
+Router.route('/register', function () {
+  // use the template named App_body for our layout
+  this.layout('App_body');
+  this.name('App.register')
+  // {{> yield}}
+  this.render('App_register');
 });
-
-
-// FlowRouter.notFound = {
-//   action() {
-//     BlazeLayout.render('App_body', { main: 'App_notFound' });
-//   },
-// };
 
