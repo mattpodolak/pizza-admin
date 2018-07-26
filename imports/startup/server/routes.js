@@ -1,10 +1,11 @@
 import { Router } from 'meteor/iron:router'
-import { Meteor } from 'meteor/meteor';
+import { CustomerCollection } from '../../api/customers.js'
 
 Router.route('/show', function () {
     var req = this.request;
     var res = this.response;
-    res.end('hello from the server\n');
+    var customers = CustomerCollection.find()
+    res.end(JSON.stringify(customers));
 }, {where: 'server'});
 
 Router.route('/add', function () {

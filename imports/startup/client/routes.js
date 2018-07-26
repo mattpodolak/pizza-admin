@@ -1,7 +1,5 @@
 import { Router } from 'meteor/iron:router'
-import { CustomerCollection } from '../../api/customers'
-import { Meteor } from 'meteor/meteor'
-
+import { CustomerCollection } from '../../api/customers.js'
 
 // Import needed templates
 import '../../ui/layouts/body/body.js';
@@ -44,9 +42,6 @@ Router.route('/customers', function () {
 
   // {{> yield}}
   this.render('App_customers', {
-    // data: {
-    //   customerList: [{ first_name: 'John', last_name: 'Smitherson', phone: '1234567890', address_one: '123 Fake St', address_two: '', postal_code: 'A1B2C3', city: 'Fakeland', createdAt: new Date() }]
-    // }
     data: {
       customerList: CustomerCollection.find()
     }
