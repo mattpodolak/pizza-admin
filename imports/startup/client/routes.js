@@ -5,19 +5,21 @@ import { Router } from 'meteor/iron:router'
 // Import needed templates
 import '../../ui/layouts/body/body.js';
 import '../../ui/pages/home/home.js';
-import '../../ui/pages/not-found/not-found.js';
-import '../../ui/pages/test/test.js';
 import '../../ui/pages/customers/customers.js';
+import '../../ui/pages/not-found/not-found.js';
 
 //header and footer 
 Router.configure({
-  layoutTemplate: 'App_body'
+  layoutTemplate: 'App_body',
+  noRoutesTemplate: 'App_notFound'
 });
 
 // Set up all routes in the app
-Router.route('/', {
+FlowRouter.route('/', {
   name: 'App.home',
-  template: 'App_home'
+  action() {
+    BlazeLayout.render('App_body', { main: 'App_home' });
+  },
 });
 
 Router.route('/customers', {
@@ -25,10 +27,6 @@ Router.route('/customers', {
   template: 'App_customers'
 });
 
-Router.route('/test',{
-  name: 'App.test',
-  template: 'App_test'
-});
 
 // FlowRouter.notFound = {
 //   action() {
