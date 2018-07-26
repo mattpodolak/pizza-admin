@@ -7,6 +7,7 @@ import '../../ui/layouts/body/body.js';
 import '../../ui/pages/home/home.js';
 import '../../ui/pages/customers/customers.js';
 import '../../ui/pages/not-found/not-found.js';
+import '../../ui/pages/login/login.js';
 
 //header and footer 
 Router.configure({
@@ -25,6 +26,11 @@ FlowRouter.route('/', {
 Router.route('/customers', {
   name: 'App.customers',
   template: 'App_customers'
+});
+
+Router.route('/login', {
+  name: 'App.login',
+  template: 'App_login'
 });
 
 

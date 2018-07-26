@@ -26,3 +26,4 @@ johanbrook:publication-collector  # Test a Meteor publication by collecting its 
 iron:router
 accounts-ui
 accounts-password
+reactive-dict
