@@ -1,7 +1,7 @@
 // All links-related publications
 
 import { Meteor } from 'meteor/meteor';
-import { Customers } from './customers.js';
+//import { CustomerCollection } from './customers.js';
 
 // if (Meteor.isServer) {
 // // Customers.publish is not a function

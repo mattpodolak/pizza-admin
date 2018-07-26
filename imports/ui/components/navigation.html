@@ -5,5 +5,11 @@
         <li><a href="{{pathFor route='App_customers'}}">Customers</a></li>
         <li><a href="{{pathFor route='App_orders'}}">Order History</a></li>
         <li><a href="{{pathFor route='App_stats'}}">Stats</a></li>
+        {{#if currentUser}}
+            <li><a href="#" class="logout">Logout</a></li>
+        {{else}}
+            <li><a href="{{pathFor route='App_register'}}">Register</a></li>
+            <li><a href="{{pathFor route='App_login'}}">Login</a></li>
+        {{/if}}
     </ul>
 </template>

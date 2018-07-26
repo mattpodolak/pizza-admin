@@ -2,7 +2,7 @@
 
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
-import { Customers } from './customers.js';
+import { CustomerCollection } from './customers.js';
 
 // Meteor.methods({
 //   'customers.insert'(title, url) {
