@@ -1,13 +1,15 @@
 <template name="App_customers">
     <div class="container">
-        <header>
-            <h2>Customer List</h2>
-        </header>
-       
-        <div class="customer">
-            {{#each customerList}}
-                {{> customer}}
-            {{/each}}
-        </div>
+        {{#if currentUser}}
+            <header>
+                <h2>Customer List</h2>
+            </header>
+        
+            <div class="customer">
+                {{#each customerList}}
+                    {{> customer}}
+                {{/each}}
+            </div>
+        {{/if}}
     </div>
 </template>       

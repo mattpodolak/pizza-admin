@@ -1,5 +1,5 @@
-import { FlowRouter } from 'meteor/kadira:flow-router';
-import { BlazeLayout } from 'meteor/kadira:blaze-layout';
+// import { FlowRouter } from 'meteor/kadira:flow-router';
+// import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { Router } from 'meteor/iron:router'
 
 // Import needed templates
@@ -16,11 +16,21 @@ Router.configure({
 });
 
 // Set up all routes in the app
-FlowRouter.route('/', {
+// FlowRouter.route('/', {
+//   name: 'App.home',
+//   action() {
+//     BlazeLayout.render('App_body', { main: 'App_home' });
+//   },
+// });
+
+Router.route('/', {
   name: 'App.home',
-  action() {
-    BlazeLayout.render('App_body', { main: 'App_home' });
-  },
+  template: 'App_customers'
+});
+
+Router.route('/home', {
+  name: 'App.home2',
+  template: 'App_customers'
 });
 
 Router.route('/customers', {
