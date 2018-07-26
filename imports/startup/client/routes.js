@@ -8,6 +8,11 @@ import '../../ui/pages/home/home.js';
 import '../../ui/pages/not-found/not-found.js';
 import '../../ui/pages/test/test.js';
 
+//header and footer 
+Router.configure({
+  layoutTemplate: 'App_body'
+});
+
 // Set up all routes in the app
 FlowRouter.route('/', {
   name: 'App.home',
