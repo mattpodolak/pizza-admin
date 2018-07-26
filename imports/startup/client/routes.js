@@ -10,47 +10,61 @@ import '../../ui/pages/register/register.js';
 
 
 Router.configure({
-
   noRoutesTemplate: 'App_notFound'
 });
 
 Router.route('/home', function () {
   // use the template named App_body for our layout
   this.layout('App_body');
-  this.name('App.home')
+
   // {{> yield}}
   this.render('App_customers');
+}, 
+{
+  name: 'App.body'
 });
 
 Router.route('/', function () {
   // use the template named App_body for our layout
   this.layout('App_body');
-  this.name('App.home2')
+
   // {{> yield}}
   this.render('App_customers');
+},
+{
+  name: 'App.home2'
 });
 
 Router.route('/customers', function () {
   // use the template named App_body for our layout
   this.layout('App_body');
-  this.name('App.customers')
+
   // {{> yield}}
   this.render('App_customers');
+},
+{
+  name: 'App.customers'
 });
 
 Router.route('/login', function () {
   // use the template named App_body for our layout
   this.layout('App_body');
-  this.name('App.login')
+
   // {{> yield}}
   this.render('App_login');
+},
+{
+  name: 'App.login'
 });
 
 Router.route('/register', function () {
   // use the template named App_body for our layout
   this.layout('App_body');
-  this.name('App.register')
+
   // {{> yield}}
   this.render('App_register');
+},
+{
+  name: 'App.register'
 });
 
