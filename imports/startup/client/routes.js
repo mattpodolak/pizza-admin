@@ -21,7 +21,7 @@ Router.route('/home', function () {
   this.render('App_customers');
 }, 
 {
-  name: 'App.body'
+  name: 'App.home'
 });
 
 Router.route('/', function () {
