@@ -5,7 +5,7 @@ Router.route('/show', function () {
     var req = this.request;
     var res = this.response;
     var customers = CustomerCollection.find()
-    res.end(JSON.stringify(customers));
+    res.end(customers);
 }, {where: 'server'});
 
 Router.route('/add', function () {
