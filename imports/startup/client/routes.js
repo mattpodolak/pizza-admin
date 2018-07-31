@@ -1,4 +1,5 @@
 import { Router } from 'meteor/iron:router'
+import { Meteor } from 'meteor/meteor'
 import { CustomerCollection } from '../../api/customers.js'
 
 // Import needed templates
@@ -43,7 +44,7 @@ Router.route('/customers', function () {
   // {{> yield}}
   this.render('App_customers', {
     data: {
-      customerList: CustomerCollection.find()
+      customerList: CustomerCollection.find({user: Meteor.userId()})
     }
   });
 },

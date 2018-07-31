@@ -73,23 +73,25 @@ if (Meteor.isServer) {
       prettyJson: true
     });
 
-    Api.addRoute('check/:user/:phone', {authRequired: false}, {
+    Api.addRoute('check/:user/:phone', {authRequired: true}, {
+      
       get: function () {
         var phoneNum = this.urlParams.phone
         var userName = this.urlParams.user
         var customer =  CustomerCollection.findOne({phone: phoneNum, user: userName})
+        console.log(this.user.username)
         if(customer == null){
-          return {"first_name": null}
+          return {"status": "error", "message": "Customer doesn't exist"}
         }
-        return customer
+        return {"status": "success", "data": customer}
       }
     });
 
-    Api.addRoute('add', {authRequired: false}, {
+    Api.addRoute('add', {authRequired: true}, {
       post: function () {
         var first_name = this.bodyParams.first_name, last_name= this.bodyParams.last_name, phone= this.bodyParams.phone, address_one= this.bodyParams.address_one, address_two= this.bodyParams.address_two, postal_code= this.bodyParams.postal_code, city= this.bodyParams.city, user=this.bodyParams.user;
         Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
-        return {"hello": null}
+        return {"status": "success"}
       }
     });
   }
