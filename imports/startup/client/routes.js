@@ -20,7 +20,7 @@ Router.route('/home', function () {
   this.layout('App_body');
 
   // {{> yield}}
-  this.render('App_customers');
+  this.render('App_home');
 }, 
 {
   name: 'App.home'
@@ -31,7 +31,7 @@ Router.route('/', function () {
   this.layout('App_body');
 
   // {{> yield}}
-  this.render('App_customers');
+  this.render('App_home');
 },
 {
   name: 'App.home2'
@@ -40,11 +40,14 @@ Router.route('/', function () {
 Router.route('/customers', function () {
   // use the template named App_body for our layout
   this.layout('App_body');
-
+  var username = Meteor.user().username
+  console.log(username)
+  var customers = CustomerCollection.find({user: username})
+  console.log(customers)
   // {{> yield}}
   this.render('App_customers', {
     data: {
-      customerList: CustomerCollection.find({user: Meteor.userId()})
+      customerList: customers
     }
   });
 },

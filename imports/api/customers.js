@@ -64,9 +64,9 @@ Meteor.methods({
 
 if (Meteor.isServer) {
     // This code only runs on the server
-    // Meteor.publish('customerCollection', function customerCollectionPublication() {
-    //   return CustomerCollection.find();
-    // });
+    Meteor.publish('customerCollection', function customerCollectionPublication() {
+      return CustomerCollection.find();
+    });
     // Global API configuration
     var Api = new Restivus({
       useDefaultAuth: true,
