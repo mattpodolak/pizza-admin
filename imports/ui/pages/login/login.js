@@ -5,9 +5,9 @@ import './login.html';
 Template.App_login.events({
     'submit form': function(event){
         event.preventDefault();
-        var email = $('[name=email]').val();
+        var username = $('[name=username]').val();
         var password = $('[name=password]').val();
-        Meteor.loginWithPassword(email, password);
+        Meteor.loginWithPassword(username, password);
         Router.go('App.home');
     }
 });
