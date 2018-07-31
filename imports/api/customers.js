@@ -15,18 +15,38 @@ Meteor.methods({
     check(address_two, String);
     check(postal_code, String);
     check(city, String);
-      console.log('HELLLO')
-    CustomerCollection.insert({
-      first_name,
-      last_name,
-      phone,
-      address_one,
-      address_two,
-      postal_code,
-      city,
-      user,
-      createdAt: new Date()
-    });
+    console.log('HELLLO')
+    var customer =  CustomerCollection.findOne({phone: phone, user: user})
+    if(customer == null){
+      console.log('inserted into db')
+      CustomerCollection.insert({
+        first_name,
+        last_name,
+        phone,
+        address_one,
+        address_two,
+        postal_code,
+        city,
+        user,
+        createdAt: new Date()
+      });
+    }
+    else{
+      console.log('updating db')
+      CustomerCollection.update(customer._id, {
+        $set: 
+        {
+          first_name: first_name,
+          last_name: last_name,
+          phone: phone,
+          address_one: address_one,
+          postal_code: postal_code,
+          city: city,
+          user: user,
+          createdAt: new Date()
+        },
+      });
+    }
   },
   // 'tasks.remove'(taskId) {
   //   check(taskId, String);
