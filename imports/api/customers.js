@@ -13,7 +13,7 @@ if (Meteor.isServer) {
   }
 
 Meteor.methods({
-    'customerCollection.insert'(first_name, last_name, phone, address_one, address_two, postal_code, city) {
+    'customerCollection.insert'(first_name, last_name, phone, address_one, address_two, postal_code, city, user) {
       check(first_name, String);
       check(last_name, String);
       check(phone, String);
@@ -30,6 +30,7 @@ Meteor.methods({
         address_two,
         postal_code,
         city,
+        user,
         createdAt: new Date()
       });
     },
