@@ -8,17 +8,15 @@ export const CustomerCollection = new Mongo.Collection('customerCollection');
 export const OrderCollection = new Mongo.Collection('orderCollection');
 
 Meteor.methods({
-  'orderCollection.insert'(phone, cart, custom, user) {
+  'orderCollection.insert'(phone, cart, user) {
     check(phone, String);
     check(user, String);
     console.log('INSERT ORDER')
-    var customer =  CustomerCollection.findOne({phone: phone, user: user})
     if(True){
       console.log('inserted into order db')
       OrderCollection.insert({
         phone,
         cart,
-        custom,
         user,
         createdAt: new Date()
       });
@@ -117,8 +115,9 @@ if (Meteor.isServer) {
 
     Api.addRoute('order', {authRequired: true}, {
       post: function () {
-        var phone = this.bodyParams.phone, cart= this.bodyParams.cart, custom= this.bodyParams.custom, user =this.bodyParams.user;
-        Meteor.call('orderCollection.insert', phone, cart, custom, user);
+        var phone = this.bodyParams.phone, cart= this.bodyParams.cart, user =this.bodyParams.user;
+        //Meteor.call('orderCollection.insert', phone, cart, user);
+        console.log('phone ', phone, ' cart ', cart)
         return {"status": "success"}
       }
     });
