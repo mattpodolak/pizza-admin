@@ -5,8 +5,25 @@ import { Meteor } from 'meteor/meteor';
 import { Restivus } from 'meteor/nimble:restivus'
 
 export const CustomerCollection = new Mongo.Collection('customerCollection');
+export const OrderCollection = new Mongo.Collection('orderCollection');
 
 Meteor.methods({
+  'orderCollection.insert'(phone, cart, custom, user) {
+    check(phone, String);
+    check(user, String);
+    console.log('INSERT ORDER')
+    var customer =  CustomerCollection.findOne({phone: phone, user: user})
+    if(True){
+      console.log('inserted into order db')
+      OrderCollection.insert({
+        phone,
+        cart,
+        custom,
+        user,
+        createdAt: new Date()
+      });
+    }
+  },
   'customerCollection.insert'(first_name, last_name, phone, address_one, address_two, postal_code, city, user) {
     check(first_name, String);
     check(last_name, String);
@@ -67,6 +84,9 @@ if (Meteor.isServer) {
     Meteor.publish('customerCollection', function customerCollectionPublication() {
       return CustomerCollection.find();
     });
+    Meteor.publish('orderCollection', function orderCollectionPublication() {
+      return OrderCollection.find();
+    });
     // Global API configuration
     var Api = new Restivus({
       useDefaultAuth: true,
@@ -91,6 +111,14 @@ if (Meteor.isServer) {
       post: function () {
         var first_name = this.bodyParams.first_name, last_name= this.bodyParams.last_name, phone= this.bodyParams.phone, address_one= this.bodyParams.address_one, address_two= this.bodyParams.address_two, postal_code= this.bodyParams.postal_code, city= this.bodyParams.city, user=this.bodyParams.user;
         Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
+        return {"status": "success"}
+      }
+    });
+
+    Api.addRoute('order', {authRequired: true}, {
+      post: function () {
+        var phone = this.bodyParams.phone, cart= this.bodyParams.cart, custom= this.bodyParams.custom, user =this.bodyParams.user;
+        Meteor.call('orderCollection.insert', phone, cart, custom, user);
         return {"status": "success"}
       }
     });
