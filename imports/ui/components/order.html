@@ -2,6 +2,11 @@
     <ul>
         <!--Paginate the orders-->
         <li>Order Number: {{orderNum}} - {{deliveryType}} - {{phone}}</li>
+        <ul>
+            {{#each cart}}
+                {{> cartItem}}
+            {{/each}}
+        </ul>
         <li>Sub-total: {{subtotal}}, Tax: {{tax}}, Delivery fee: {{delivery}}, Tip: {{tip}}</li>
     </ul>
 </template>
