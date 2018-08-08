@@ -105,6 +105,10 @@ if (Meteor.isServer) {
         if(customer == null){
           return {"status": "error", "message": "Customer doesn't exist"}
         }
+        if(order == null){
+          return {"status": "success", "data": customer, "recent": "nothing"}
+        }
+        console.log(order.cart)
         return {"status": "success", "data": customer, "recent": order.cart}
       }
     });
