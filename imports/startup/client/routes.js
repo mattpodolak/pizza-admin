@@ -1,11 +1,13 @@
 import { Router } from 'meteor/iron:router'
 import { Meteor } from 'meteor/meteor'
 import { CustomerCollection } from '../../api/customers.js'
+import { OrderCollection } from '../../api/customers.js'
 
 // Import needed templates
 import '../../ui/layouts/body/body.js';
 import '../../ui/pages/home/home.js';
 import '../../ui/pages/customers/customers.js';
+import '../../ui/pages/orders/orders.js';
 import '../../ui/pages/not-found/not-found.js';
 import '../../ui/pages/login/login.js';
 import '../../ui/pages/register/register.js';
@@ -53,6 +55,24 @@ Router.route('/customers', function () {
 },
 {
   name: 'App.customers'
+});
+
+Router.route('/orders', function () {
+  // use the template named App_body for our layout
+  this.layout('App_body');
+  var username = Meteor.user().username
+  console.log(username)
+  var orders = OrderCollection.find({user: username})
+  console.log(orders)
+  // {{> yield}}
+  this.render('App_orders', {
+    data: {
+      orderList: orders
+    }
+  });
+},
+{
+  name: 'App.orders'
 });
 
 Router.route('/login', function () {
