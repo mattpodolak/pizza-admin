@@ -100,11 +100,12 @@ if (Meteor.isServer) {
         var phoneNum = this.urlParams.phone
         var userName = this.urlParams.user
         var customer =  CustomerCollection.findOne({phone: phoneNum, user: userName})
+        var order = OrderCollection.findOne({phone: phoneNum, user: userName}, { sort: { createdAt: -1 } })
         console.log(this.user.username)
         if(customer == null){
           return {"status": "error", "message": "Customer doesn't exist"}
         }
-        return {"status": "success", "data": customer}
+        return {"status": "success", "data": customer, "recent": order.cart}
       }
     });
 
