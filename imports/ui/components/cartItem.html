@@ -1,5 +1,50 @@
 <template name="cartItem">
     <ul>
-        <li>{{name}} - {{custom.addOns}}</li>
+        {{#if custom.addOns}}
+            <li>{{name}} - {{custom.addOns}}</li>
+        {{else}}
+            <li>{{name}}</li>
+        {{/if}}
+        
+        <li>Special notes: {{custom.specialNotes}}</li>
+        {{#if custom.toppings}}
+            <li>Pizza 1: 
+                {{#each topping in custom.toppings}}
+                    {{topping}}, 
+                {{/each}}
+            </li>
+        {{/if}}
+        {{#if custom.toppings2}}
+            <li>Pizza 2: 
+                {{#each topping in custom.toppings2}}
+                    {{topping}}, 
+                {{/each}}
+            </li>
+        {{/if}}
+        {{#if custom.toppings3}}
+            <li>Pizza 3: 
+                {{#each topping in custom.toppings3}}
+                    {{topping}}, 
+                {{/each}}
+            </li>
+        {{/if}}
+        {{#if custom.pops}}
+            <li>Pops:                 
+                {{#each pop in custom.pops}}
+                    {{pop}}, 
+                {{/each}}
+            </li>
+        {{/if}}
+        {{#if custom.dips}}
+        <li>Dips:                 
+                {{#each dip in custom.dips}}
+                    {{dip}}, 
+                {{/each}}
+            </li>
+        {{/if}}
+        {{#if custom.pasta}}
+            <li>Pasta: {{custom.pasta}}</li>
+        {{/if}}
+
     </ul>
 </template>
