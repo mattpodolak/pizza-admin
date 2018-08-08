@@ -1,0 +1,15 @@
+<template name="App_orders">
+    <div class="container">
+        {{#if currentUser}}
+            <header>
+                <h2>Order List</h2>
+            </header>
+        
+            <div class="order">
+                {{#each orderList}}
+                    {{> order}}
+                {{/each}}
+            </div>
+        {{/if}}
+    </div>
+</template>    

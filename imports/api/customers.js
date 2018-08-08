@@ -8,19 +8,22 @@ export const CustomerCollection = new Mongo.Collection('customerCollection');
 export const OrderCollection = new Mongo.Collection('orderCollection');
 
 Meteor.methods({
-  'orderCollection.insert'(phone, cart, user) {
+  'orderCollection.insert'(phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user) {
     check(phone, String);
     check(user, String);
-    console.log('INSERT ORDER')
-    if(True){
-      console.log('inserted into order db')
-      OrderCollection.insert({
-        phone,
-        cart,
-        user,
-        createdAt: new Date()
-      });
-    }
+    console.log('inserted into order db')
+    OrderCollection.insert({
+      phone,
+      cart,
+      orderNum,
+      deliveryType,
+      subtotal,
+      tax,
+      delivery,
+      tip,
+      user,
+      createdAt: new Date()
+    });
   },
   'customerCollection.insert'(first_name, last_name, phone, address_one, address_two, postal_code, city, user) {
     check(first_name, String);
@@ -115,8 +118,8 @@ if (Meteor.isServer) {
 
     Api.addRoute('order', {authRequired: true}, {
       post: function () {
-        var phone = this.bodyParams.phone, cart= this.bodyParams.cart, user =this.bodyParams.user;
-        //Meteor.call('orderCollection.insert', phone, cart, user);
+        var phone = this.bodyParams.phone, cart= this.bodyParams.cart, orderNum= this.bodyParams.orderNum, deliveryType= this.bodyParams.deliveryType, subtotal=this.bodyParams.subtotal, tax=this.bodyParams.tax, delivery=this.bodyParams.delivery, tip=this.bodyParams.tip, user =this.bodyParams.user;
+        //Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
         console.log('phone ', phone, ' cart ', cart)
         return {"status": "success"}
       }
