@@ -125,7 +125,7 @@ if (Meteor.isServer) {
     Api.addRoute('print/:user', {authRequired: true}, {
       get: function () {
         var userName = this.urlParams.user
-        var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: -1 } })
+        var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
           return {"status": "success", "data": null, "message":"Nothing to print"}
         }
