@@ -22,6 +22,7 @@ Meteor.methods({
       delivery,
       tip,
       user,
+      print: 1,
       createdAt: new Date()
     });
   },
@@ -118,6 +119,25 @@ if (Meteor.isServer) {
         var first_name = this.bodyParams.first_name, last_name= this.bodyParams.last_name, phone= this.bodyParams.phone, address_one= this.bodyParams.address_one, address_two= this.bodyParams.address_two, postal_code= this.bodyParams.postal_code, city= this.bodyParams.city, user=this.bodyParams.user;
         Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
         return {"status": "success"}
+      }
+    });
+
+    Api.addRoute('print/:user', {authRequired: true}, {
+      get: function () {
+        var userName = this.urlParams.user
+        var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: -1 } })
+        if(order == null){
+          return {"status": "success", "data": null, "message":"Nothing to print"}
+        }
+        else{
+          OrderCollection.update(order._id, {
+            $set: 
+            {
+              print: 0
+            },
+          });
+          return {"status": "success", "data": order, "message":"Order to print"}
+        }
       }
     });
 
