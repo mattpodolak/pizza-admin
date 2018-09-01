@@ -141,6 +141,25 @@ if (Meteor.isServer) {
       }
     });
 
+    Api.addRoute('receipt/:user', {authRequired: true}, {
+      get: function () {
+        var userName = this.urlParams.user
+        var order = OrderCollection.findOne({print: 0, user: userName}, { sort: { createdAt: 1 } })
+        if(order == null){
+          return {"status": "success", "data": null, "message":"Nothing to print"}
+        }
+        else{
+          OrderCollection.update(order._id, {
+            $set: 
+            {
+              print: 2
+            },
+          });
+          return {"status": "success", "data": order, "message":"Receipt to print"}
+        }
+      }
+    });
+
     Api.addRoute('order', {authRequired: true}, {
       post: function () {
         var phone = this.bodyParams.phone, cart= this.bodyParams.cart, orderNum= this.bodyParams.orderNum, deliveryType= this.bodyParams.deliveryType, subtotal=this.bodyParams.subtotal, tax=this.bodyParams.tax, delivery=this.bodyParams.delivery, tip=this.bodyParams.tip, user =this.bodyParams.user;
