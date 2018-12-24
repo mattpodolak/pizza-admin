@@ -141,6 +141,38 @@ if (Meteor.isServer) {
       }
     });
 
+    Api.addRoute('print/2/:user', {authRequired: false}, {
+      post: function () {
+        //check if job is available
+        var userName = this.urlParams.user
+        var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
+        if(order == null){
+          //no orders to print
+          return {"status": "success", "data": null, "message":"Nothing to print"}
+        }
+        else{
+          //order to print
+          return {"status": "success", "data": order, "message":"Order to print"}
+        }
+      },
+      get: function () {
+        var userName = this.urlParams.user
+        var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
+        if(order == null){
+          return {"status": "success", "data": null, "message":"Nothing to print"}
+        }
+        else{
+          OrderCollection.update(order._id, {
+            $set: 
+            {
+              print: 0
+            },
+          });
+          return {"status": "success", "data": order, "message":"Order to print"}
+        }
+      }
+    });
+
     Api.addRoute('receipt/:user', {authRequired: true}, {
       get: function () {
         var userName = this.urlParams.user
