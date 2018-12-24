@@ -144,31 +144,35 @@ if (Meteor.isServer) {
     Api.addRoute('print/2/:user', {authRequired: false}, {
       post: function () {
         //check if job is available
+        //check status code if 2xx turn any print: 2 jobs to print: 0 as they printed fine, otherwise set to print 1
         var userName = this.urlParams.user
         var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
           //no orders to print
-          return {"status": "success", "data": null, "message":"Nothing to print"}
+          return {"jobReady": "false"}
         }
         else{
           //order to print
-          return {"status": "success", "data": order, "message":"Order to print"}
+          return {"jobReady": "true", "mediaTypes": "['text/plain']"}
         }
       },
       get: function () {
         var userName = this.urlParams.user
         var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
-          return {"status": "success", "data": null, "message":"Nothing to print"}
+          //error encountered
+          return {"Status": "404"}
         }
         else{
+          //print order
+          //print 2 - not disregarded until confirm code gotten from POST
           OrderCollection.update(order._id, {
             $set: 
             {
-              print: 0
+              print: 2
             },
           });
-          return {"status": "success", "data": order, "message":"Order to print"}
+          return {"Status": "200", "Message": "order"}
         }
       }
     });
