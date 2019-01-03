@@ -149,30 +149,30 @@ if (Meteor.isServer) {
         //check status code if 2xx turn any print: 2 jobs to print: 0 as they printed fine, otherwise set to print 1
         if(statuscode.charAt(0) == "2"){
           //attempted print job succeeded, no longer needs to be printed
-          var order = OrderCollection.findOne({print: 2, user: userName}, { sort: { createdAt: 1 } })
+          var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
           if(order != null){
             OrderCollection.update(order._id, {
               $set: 
               {
-                print: 0
+                print: 10
               },
             });
           }
         }
         else{
           //attempted print job failed, still needs to be printed
-          var order = OrderCollection.findOne({print: 2, user: userName}, { sort: { createdAt: 1 } })
+          var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
           if(order != null){
             OrderCollection.update(order._id, {
               $set: 
               {
-                print: 1
+                print: 11
               },
             });
           }
         }
         //check if any orders need to be printed still
-        var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
+        var order = OrderCollection.findOne({print: 11, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
           //no orders to print
           return {"jobReady": "false"}
@@ -185,10 +185,10 @@ if (Meteor.isServer) {
       get: function () {
         var userName = this.urlParams.user
         //see if order needs to be re-downloaded
-        var order = OrderCollection.findOne({print: 2, user: userName}, { sort: { createdAt: 1 } })
+        var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
           //if no orders to be redownloaded, print next order thats ready
-          var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
+          var order = OrderCollection.findOne({print: 11, user: userName}, { sort: { createdAt: 1 } })
         }
         if(order == null){
           //error encountered
@@ -196,11 +196,11 @@ if (Meteor.isServer) {
         }
         else{
           //print order
-          //print 2 - not disregarded until confirm code gotten from POST
+          //print 12 - not disregarded until confirm code gotten from POST
           OrderCollection.update(order._id, {
             $set: 
             {
-              print: 2
+              print: 12
             },
           });
           return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
@@ -208,14 +208,14 @@ if (Meteor.isServer) {
       },
       delete: function () {
         //incase cant handle print
-        //turn any print: 2 jobs to print: 1 as they didnt print
+        //turn any print: 12 jobs to print: 11 as they didnt print
         var userName = this.urlParams.user
-        var order = OrderCollection.findOne({print: 2, user: userName}, { sort: { createdAt: 1 } })
+        var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
         if(order != null){
           OrderCollection.update(order._id, {
             $set: 
             {
-              print: 1
+              print: 11
             },
           });
         }
