@@ -182,7 +182,7 @@ if (Meteor.isServer) {
         }
         else{
           //order to print
-          return {"jobReady": "true", "mediaTypes": "['text/plain']"}
+          return {"jobReady": "true", "mediaTypes":  [ "image/png", "text/plain" ]}
         }
       },
       get: function () {
