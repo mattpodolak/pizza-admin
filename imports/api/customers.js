@@ -144,8 +144,33 @@ if (Meteor.isServer) {
     Api.addRoute('print/2/:user', {authRequired: false}, {
       post: function () {
         //check if job is available
-        //check status code if 2xx turn any print: 2 jobs to print: 0 as they printed fine, otherwise set to print 1
         var userName = this.urlParams.user
+        var statuscode = this.bodyParams.statusCode
+        //check status code if 2xx turn any print: 2 jobs to print: 0 as they printed fine, otherwise set to print 1
+        if(statuscode.charAt(0) == "2"){
+          //attempted print job succeeded, no longer needs to be printed
+          var order = OrderCollection.findOne({print: 2, user: userName}, { sort: { createdAt: 1 } })
+          if(order != null){
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 0
+              },
+            });
+          }
+        }
+        else{
+          //attempted print job failed, still needs to be printed
+          var order = OrderCollection.findOne({print: 2, user: userName}, { sort: { createdAt: 1 } })
+          if(order != null){
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 1
+              },
+            });
+          }
+        }
         var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
           //no orders to print
@@ -174,6 +199,21 @@ if (Meteor.isServer) {
           });
           return {"Status": "200", "Message": "order"}
         }
+      },
+      delete: function () {
+        //incase cant handle print
+        //turn any print: 2 jobs to print: 1 as they didnt print
+        var userName = this.urlParams.user
+        var order = OrderCollection.findOne({print: 2, user: userName}, { sort: { createdAt: 1 } })
+        if(order != null){
+          OrderCollection.update(order._id, {
+            $set: 
+            {
+              print: 1
+            },
+          });
+        }
+        return {"Status": "200", "Message": "OK"}
       }
     });
 
