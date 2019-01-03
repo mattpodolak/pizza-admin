@@ -184,7 +184,12 @@ if (Meteor.isServer) {
       },
       get: function () {
         var userName = this.urlParams.user
-        var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
+        //see if order needs to be re-downloaded
+        var order = OrderCollection.findOne({print: 2, user: userName}, { sort: { createdAt: 1 } })
+        if(order == null){
+          //if no orders to be redownloaded, print next order thats ready
+          var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
+        }
         if(order == null){
           //error encountered
           return {"Status": "404"}
