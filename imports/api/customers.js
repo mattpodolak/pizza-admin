@@ -149,7 +149,7 @@ if (Meteor.isServer) {
         var requestBody = this.bodyParams
         console.log("status ", statuscode)
         console.log(requestBody)
-        //check status code if 2xx turn any print: 2 jobs to print: 0 as they printed fine, otherwise set to print 1
+        //check status code if 2xx turn any print: 12 jobs to print: 10 as they printed fine, otherwise set to print 11
         if(statuscode.charAt(0) == "2"){
           //attempted print job succeeded, no longer needs to be printed
           var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
@@ -213,14 +213,32 @@ if (Meteor.isServer) {
         //incase cant handle print
         //turn any print: 12 jobs to print: 11 as they didnt print
         var userName = this.urlParams.user
-        var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
-        if(order != null){
-          OrderCollection.update(order._id, {
-            $set: 
-            {
-              print: 11
-            },
-          });
+        var statuscode = this.urlParams.code
+        console.log("code ", statuscode)
+        //check status code if 2xx turn any print: 12 jobs to print: 10 as they printed fine, otherwise set to print 11
+        if(statuscode.charAt(0) == "2"){
+          //attempted print job succeeded, no longer needs to be printed
+          var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
+          if(order != null){
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 10
+              },
+            });
+          }
+        }
+        else{
+          //print failed, because printer couldn't handle the data
+          var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
+          if(order != null){
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 11
+              },
+            });
+          }
         }
         return {"Status": "200"}
       }
