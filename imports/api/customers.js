@@ -182,7 +182,8 @@ if (Meteor.isServer) {
         }
         else{
           //order to print
-          return {"jobReady": "true", "mediaTypes":  [ "image/png", "text/plain" ]}
+          //return {"jobReady": "true", "mediaTypes":  [ "image/png", "text/plain" ]}
+          return {"jobReady": "true", "mediaTypes":  [ "text/plain" ]}
         }
       },
       get: function () {
@@ -206,7 +207,8 @@ if (Meteor.isServer) {
               print: 12
             },
           });
-          return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
+          //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
+          return {"Status": "200",  "Message": "order"}
         }
       },
       delete: function () {
