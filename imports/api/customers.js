@@ -143,7 +143,7 @@ if (Meteor.isServer) {
 
     Api.addRoute('print/2/:user', {authRequired: false}, {
       post: function () {
-        //check if job is available
+        // set variables
         var userName = this.urlParams.user
         var statuscode = this.bodyParams.statusCode
         //check status code if 2xx turn any print: 2 jobs to print: 0 as they printed fine, otherwise set to print 1
@@ -171,6 +171,7 @@ if (Meteor.isServer) {
             });
           }
         }
+        //check if any orders need to be printed still
         var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
           //no orders to print
@@ -197,7 +198,7 @@ if (Meteor.isServer) {
               print: 2
             },
           });
-          return {"Status": "200", "Message": "order"}
+          return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
         }
       },
       delete: function () {
@@ -213,7 +214,7 @@ if (Meteor.isServer) {
             },
           });
         }
-        return {"Status": "200", "Message": "OK"}
+        return {"Status": "200"}
       }
     });
 
