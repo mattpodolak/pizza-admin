@@ -146,6 +146,9 @@ if (Meteor.isServer) {
         // set variables
         var userName = this.urlParams.user
         var statuscode = this.bodyParams.statusCode
+        var requestBody = this.bodyParams
+        console.log("status ", statuscode)
+        console.log(requestBody)
         //check status code if 2xx turn any print: 2 jobs to print: 0 as they printed fine, otherwise set to print 1
         if(statuscode.charAt(0) == "2"){
           //attempted print job succeeded, no longer needs to be printed
