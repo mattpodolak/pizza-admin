@@ -213,7 +213,8 @@ if (Meteor.isServer) {
         //incase cant handle print
         //turn any print: 12 jobs to print: 11 as they didnt print
         var userName = this.urlParams.user
-        var statuscode = this.urlParams.code
+        var query = this.queryParams;
+        var statuscode = query.code
         console.log("code ", statuscode)
         //check status code if 2xx turn any print: 12 jobs to print: 10 as they printed fine, otherwise set to print 11
         if(statuscode.charAt(0) == "2"){
