@@ -193,10 +193,22 @@ if (Meteor.isServer) {
         if(order == null){
           //if no orders to be redownloaded, print next order thats ready
           var order = OrderCollection.findOne({print: 11, user: userName}, { sort: { createdAt: 1 } })
-        }
-        if(order == null){
-          //error encountered
-          return {"Status": "404"}
+          if(order == null){
+            //error encountered
+            return {"Status": "404"}
+          }
+          else{
+            //print order
+            //print 12 - not disregarded until confirm code gotten from POST
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 12
+              },
+            });
+            //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
+            return {"Status": "200",  "Message": "order"}
+          }
         }
         else{
           //print order
