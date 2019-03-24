@@ -282,6 +282,7 @@ if (Meteor.isServer) {
       post: function () {
         var cart = this.bodyParams.cart;
         console.log(cart);
+        return {"status": "success"}
       }
     });
 
