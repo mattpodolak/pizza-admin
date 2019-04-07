@@ -287,18 +287,34 @@ if (Meteor.isServer) {
 
     Api.addRoute('palace', {authRequired: false}, {
       post: function () {
-        var cart = this.bodyParams.cart;
+        var cart = this.bodyParams.cart;       
         var subtotal = this.bodyParams.subtotal;
         var final = this.bodyParams.final;
-        var delivery = this.bodyParams.delivery;
-        var ordernum = this.bodyParams.ordernum;
+        var deliveryType = this.bodyParams.delivery;
+        var orderNum = this.bodyParams.ordernum;
         var customer = this.bodyParams.customer;
-        console.log("Cart: ", cart[1]);
+        
+
+        if(deliveryType == "Delivery"){
+          var delivery = 5;
+        }
+        else{
+          var delivery = 0;
+        }
+        var tip = 0;
+        var user = "Palace";
+        cart = cart[1];
+        var phone = customer[3];
+        var tax = Number(subtotal)*0.13;
+        tax = tax.toFixed(2);
+
+        console.log("Cart: ", cart);
         console.log("Subtotal: ", subtotal);
-        console.log("Final: ", final);
-        console.log("Delivery Type: ", delivery);
-        console.log("Order Number: ", ordernum);
-        console.log("Customer: ", customer);
+        console.log("Tax: ", tax);
+        console.log("Delivery Type: ", deliveryType);
+        console.log("Order Number: ", orderNum);
+        console.log("Customer: ", customer[3]);
+       // Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
         return {"status": "success"}
       }
     });
