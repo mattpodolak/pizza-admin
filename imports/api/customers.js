@@ -254,6 +254,7 @@ if (Meteor.isServer) {
         var query = this.queryParams;
         var statuscode = query.code
         console.log("code ", statuscode)
+        console.log("delete  ", query)
         //check status code if 2xx turn any print: 12 jobs to print: 10 as they printed fine, otherwise set to print 11
         if(statuscode.charAt(0) == "2"){
           //attempted print job succeeded, no longer needs to be printed
