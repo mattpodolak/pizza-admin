@@ -154,6 +154,9 @@ if (Meteor.isServer) {
       post: function () {
         // set variables
         var userName = this.urlParams.user
+        if(userName == "Napoli"){
+          userName = "Palace";
+        }
         var statuscode = this.bodyParams.statusCode
         var requestBody = this.bodyParams
         console.log("status ", statuscode)
@@ -199,6 +202,9 @@ if (Meteor.isServer) {
       },
       get: function () {
         var userName = this.urlParams.user
+        if(userName == "Napoli"){
+          userName = "Palace";
+        }
         //see if order needs to be re-downloaded
         var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
@@ -242,6 +248,9 @@ if (Meteor.isServer) {
         //incase cant handle print
         //turn any print: 12 jobs to print: 11 as they didnt print
         var userName = this.urlParams.user
+        if(userName == "Napoli"){
+          userName = "Palace";
+        }
         var query = this.queryParams;
         var statuscode = query.code
         console.log("code ", statuscode)
