@@ -314,7 +314,7 @@ if (Meteor.isServer) {
         console.log("Tax: ", tax);
         console.log("Delivery Type: ", deliveryType);
         console.log("Order Number: ", orderNum);
-        console.log("Customer: ", customer[3]);
+        console.log("Customer: ", phone);
        // Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
         return {"status": "success"}
       }
