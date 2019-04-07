@@ -288,7 +288,17 @@ if (Meteor.isServer) {
     Api.addRoute('palace', {authRequired: false}, {
       post: function () {
         var cart = this.bodyParams.cart;
-        console.log(cart[0]);
+        var subtotal = this.bodyParams.subtotal;
+        var final = this.bodyParams.final;
+        var delivery = this.bodyParams.delivery;
+        var ordernum = this.bodyParams.ordernum;
+        var customer = this.bodyParams.customer;
+        console.log("Cart: ", cart[1]);
+        console.log("Subtotal: ", subtotal);
+        console.log("Final: ", final);
+        console.log("Delivery Type: ", delivery);
+        console.log("Order Number: ", ordernum);
+        console.log("Customer: ", customer);
         return {"status": "success"}
       }
     });
