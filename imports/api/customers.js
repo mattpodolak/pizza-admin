@@ -178,11 +178,13 @@ if (Meteor.isServer) {
         var order = OrderCollection.findOne({print: 11, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
           //no orders to print
+          console.log("No orders to print")
           return {"jobReady": "false"}
         }
         else{
           //order to print
           //return {"jobReady": "true", "mediaTypes":  [ "image/png", "text/plain" ]}
+          console.log("Orders to print")
           return {"jobReady": "true", "mediaTypes":  [ "text/plain" ]}
         }
       },
@@ -195,6 +197,7 @@ if (Meteor.isServer) {
           var order = OrderCollection.findOne({print: 11, user: userName}, { sort: { createdAt: 1 } })
           if(order == null){
             //error encountered
+            console.log("Error encountered")
             return {"Status": "404"}
           }
           else{
@@ -207,7 +210,9 @@ if (Meteor.isServer) {
               },
             });
             //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
-            return {"Status": "200",  "Message": "order"}
+            console.log("Print next order thats ready")
+            return {"jobReady": "true", "mediaTypes":  [ "text/plain" ], "display": [{"name": "<deviceName>", "message": "HELLLOO [nl] HELO?"}]}
+            //return {"Status": "200",  "Message": "order"}
           }
         }
         else{
@@ -219,6 +224,7 @@ if (Meteor.isServer) {
               print: 12
             },
           });
+          console.log("Reprint order that didn't delete")
           //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
           return {"Status": "200",  "Message": "order"}
         }
@@ -255,6 +261,7 @@ if (Meteor.isServer) {
             });
           }
         }
+        console.log("Delete order")
         return {"Status": "200"}
       }
     });
