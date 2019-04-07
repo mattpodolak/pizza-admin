@@ -11,6 +11,15 @@ Meteor.methods({
   'orderCollection.insert'(phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user) {
     check(phone, String);
     check(user, String);
+    if(user == "Napoli"){
+      var printNum = 1;
+    }
+    else if(user == "Palace"){
+      var printNum = 11;
+    }
+    else{
+      var printNum = 111;
+    }
     console.log('inserted into order db')
     OrderCollection.insert({
       phone,
@@ -22,7 +31,7 @@ Meteor.methods({
       delivery,
       tip,
       user,
-      print: 1,
+      print: printNum,
       createdAt: new Date()
     });
   },
@@ -315,7 +324,7 @@ if (Meteor.isServer) {
         console.log("Delivery Type: ", deliveryType);
         console.log("Order Number: ", orderNum);
         console.log("Customer: ", phone);
-       // Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
+        Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
         return {"status": "success"}
       }
     });
