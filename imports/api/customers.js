@@ -305,6 +305,7 @@ if (Meteor.isServer) {
         var user = "Palace";
         cart = cart[1];
         var phone = customer[3];
+        phone = phone.replace('Phone: ','');
         var tax = Number(subtotal)*0.13;
         tax = tax.toFixed(2);
 
