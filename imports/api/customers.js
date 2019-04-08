@@ -374,6 +374,7 @@ if (Meteor.isServer) {
         for(i=2; i < cart.length; i++){
           cartString = cartString + cart[i];
         }
+        cart = cartString;
         var first_name = customer[0];
         var last_name = customer[1];
         var phone = customer[3];
