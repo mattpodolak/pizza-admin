@@ -229,14 +229,14 @@ if (Meteor.isServer) {
             if(customer == null){
               console.log("COULDN'T FIND CUSTOMER")
               var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
-               "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: " + order.subtotal + 
-               "\nDelivery: " + order.delivery + "\nTax: " + order.tax + "\nTOTAL: " + total;            }
+               "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+               "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
             else{
               var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
                "\n Customer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
                "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
-               "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: " + order.subtotal + 
-               "\nDelivery: " + order.delivery + "\nTax: " + order.tax + "\nTOTAL: " + total;
+               "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+               "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
             }
             //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
             console.log("Print next order thats ready")
@@ -262,7 +262,31 @@ if (Meteor.isServer) {
           });
           console.log("Reprint order that didn't delete")
           //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
-          return {"Status": "200",  "Message": "order"}
+          var total = Number(order.delivery) + Number(order.tax) + Number(order.subtotal);
+          var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
+          if(customer == null){
+            console.log("COULDN'T FIND CUSTOMER")
+            var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
+             "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+             "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
+          else{
+            var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
+             "\n Customer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
+             "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
+             "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+             "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
+          }
+          //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
+          console.log("Print next order thats ready")
+          //return {"jobReady": "true", "mediaTypes":  [ "text/plain" ], "display": [{"name": "<deviceName>", "message": "HELLLOO [nl] HELO?"}]}
+          return {
+            'statusCode': 200,
+            headers: {
+              'Content-Type': 'text/plain',
+              'Status': 200
+            },
+            body: printBody
+          }
         }
       },
       delete: function () {
