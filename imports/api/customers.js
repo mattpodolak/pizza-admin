@@ -362,13 +362,7 @@ if (Meteor.isServer) {
         var tax = Number(subtotal)*0.13;
         tax = tax.toFixed(2);
 
-        // console.log("fname: ", first_name);
-        // console.log("lname: ", last_name);
-        // console.log("address one: ", address_one);
-        // console.log("address two: ", address_two);
-        // console.log("postal code: ", postal_code);
-        // console.log("city: ", city);
-        // console.log("Customer: ", customer);
+        console.log("Cart: ", cart);
         Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
         Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
         return {"status": "success"}
