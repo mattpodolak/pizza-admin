@@ -224,6 +224,14 @@ if (Meteor.isServer) {
                 print: 12
               },
             });
+            var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
+            if(customer == null){
+              console.log("COULDN'T FIND CUSTOMER")
+              var printBody = "PIZZA PALACE [nl] Order Num: " + order.orderNum + "[nl]" +  order.cart;
+            }
+            else{
+              var printBody = "PIZZA PALACE [nl] Order Num: " + order.orderNum + "[nl]" +  order.cart;
+            }
             //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
             console.log("Print next order thats ready")
             //return {"jobReady": "true", "mediaTypes":  [ "text/plain" ], "display": [{"name": "<deviceName>", "message": "HELLLOO [nl] HELO?"}]}
@@ -233,7 +241,7 @@ if (Meteor.isServer) {
                 'Content-Type': 'text/plain',
                 'Status': 200
               },
-              body: ['Order Num: ', order.orderNum, order.cart]
+              body: printBody
             }
           }
         }
@@ -348,13 +356,13 @@ if (Meteor.isServer) {
         var tax = Number(subtotal)*0.13;
         tax = tax.toFixed(2);
 
-        console.log("fname: ", first_name);
-        console.log("lname: ", last_name);
-        console.log("address one: ", address_one);
-        console.log("address two: ", address_two);
-        console.log("postal code: ", postal_code);
-        console.log("city: ", city);
-        console.log("Customer: ", customer);
+        // console.log("fname: ", first_name);
+        // console.log("lname: ", last_name);
+        // console.log("address one: ", address_one);
+        // console.log("address two: ", address_two);
+        // console.log("postal code: ", postal_code);
+        // console.log("city: ", city);
+        // console.log("Customer: ", customer);
         Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
         Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
         return {"status": "success"}
