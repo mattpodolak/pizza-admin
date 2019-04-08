@@ -225,15 +225,16 @@ if (Meteor.isServer) {
               },
             });
             var total = Number(order.delivery) + Number(order.tax) + Number(order.subtotal);
+            total = tptal.toFixed(2);
             var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
             if(customer == null){
               console.log("COULDN'T FIND CUSTOMER")
-              var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
+              var printBody = "PIZZA PALACE \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
                "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
                "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
             else{
-              var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
-               "\n Customer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
+              var printBody = "PIZZA PALACE \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+               "\nCustomer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
                "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
                "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
                "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
@@ -263,15 +264,16 @@ if (Meteor.isServer) {
           console.log("Reprint order that didn't delete")
           //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
           var total = Number(order.delivery) + Number(order.tax) + Number(order.subtotal);
+          total = total.toFixed(2);
           var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
           if(customer == null){
             console.log("COULDN'T FIND CUSTOMER")
-            var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
+            var printBody = "PIZZA PALACE \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
              "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
              "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
           else{
-            var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
-             "\n Customer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
+            var printBody = "PIZZA PALACE \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+             "\nCustomer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
              "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
              "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
              "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
