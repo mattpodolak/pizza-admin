@@ -233,7 +233,7 @@ if (Meteor.isServer) {
                 'Content-Type': 'text/plain',
                 'Status': 200
               },
-              body: ['Order Num: ' + order.orderNum, order.cart]
+              body: ['Order Num: ', order.orderNum, order.cart]
             }
           }
         }
@@ -330,15 +330,21 @@ if (Meteor.isServer) {
         var tip = 0;
         var user = "Palace";
         cart = cart[1];
-        var first_name = customer[1];
-        var last_name = customer[2];
+        var first_name = customer[0];
+        var last_name = customer[1];
         var phone = customer[3];
         var address_one = customer[4];
         var address_two = customer[5];
-        var postal_code = customer[6];
-        var city = customer[7];
+        var postal_code = customer[7];
+        var city = customer[6];
 
         phone = phone.replace('Phone: ','');
+        first_name = first_name.replace('Name: ','');
+        last_name = last_name.replace(' ','');
+        address_one = address_one.replace('Address 1: ','');
+        address_two = address_two.replace('Address 2: ','');
+        postal_code = postal_code.replace('Postal Code: ','');
+        city = city.replace('City: ','');
         var tax = Number(subtotal)*0.13;
         tax = tax.toFixed(2);
 
@@ -350,7 +356,7 @@ if (Meteor.isServer) {
         console.log("city: ", city);
         console.log("Customer: ", customer);
         Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
-        //Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
+        Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
         return {"status": "success"}
       }
     });
