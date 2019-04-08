@@ -369,7 +369,11 @@ if (Meteor.isServer) {
         }
         var tip = 0;
         var user = "Palace";
-        cart = cart[1];
+        var i;
+        var cartString = cart[1];
+        for(i=2; i < cart.length; i++){
+          cartString = cartString + cart[i];
+        }
         var first_name = customer[0];
         var last_name = customer[1];
         var phone = customer[3];
