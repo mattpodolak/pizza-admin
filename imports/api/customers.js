@@ -225,7 +225,7 @@ if (Meteor.isServer) {
               },
             });
             var total = Number(order.delivery) + Number(order.tax) + Number(order.subtotal);
-            total = tptal.toFixed(2);
+            total = total.toFixed(2);
             var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
             if(customer == null){
               console.log("COULDN'T FIND CUSTOMER")
