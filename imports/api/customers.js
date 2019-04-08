@@ -233,7 +233,7 @@ if (Meteor.isServer) {
                 'Content-Type': 'text/plain',
                 'Status': 200
               },
-              body: 'There is nothing here!'
+              body: ['Order Num: ' + order.orderNum, order.cart]
             }
           }
         }
@@ -330,18 +330,27 @@ if (Meteor.isServer) {
         var tip = 0;
         var user = "Palace";
         cart = cart[1];
+        var first_name = customer[1];
+        var last_name = customer[2];
         var phone = customer[3];
+        var address_one = customer[4];
+        var address_two = customer[5];
+        var postal_code = customer[6];
+        var city = customer[7];
+
         phone = phone.replace('Phone: ','');
         var tax = Number(subtotal)*0.13;
         tax = tax.toFixed(2);
 
-        console.log("Cart: ", cart);
-        console.log("Subtotal: ", subtotal);
-        console.log("Tax: ", tax);
-        console.log("Delivery Type: ", deliveryType);
-        console.log("Order Number: ", orderNum);
-        console.log("Customer: ", phone);
+        console.log("fname: ", first_name);
+        console.log("lname: ", last_name);
+        console.log("address one: ", address_one);
+        console.log("address two: ", address_two);
+        console.log("postal code: ", postal_code);
+        console.log("city: ", city);
+        console.log("Customer: ", customer);
         Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
+        //Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
         return {"status": "success"}
       }
     });
