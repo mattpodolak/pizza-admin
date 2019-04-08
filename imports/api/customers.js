@@ -225,6 +225,7 @@ if (Meteor.isServer) {
               },
             });
             var total = Number(order.delivery) + Number(order.tax) + Number(order.subtotal);
+            order.deliver = Number(order.delivery).toFixed(2)
             total = total.toFixed(2);
             var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
             if(customer == null){
@@ -264,6 +265,7 @@ if (Meteor.isServer) {
           console.log("Reprint order that didn't delete")
           //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
           var total = Number(order.delivery) + Number(order.tax) + Number(order.subtotal);
+          order.deliver = Number(order.delivery).toFixed(2)
           total = total.toFixed(2);
           var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
           if(customer == null){
@@ -370,9 +372,9 @@ if (Meteor.isServer) {
         var tip = 0;
         var user = "Palace";
         var i;
-        var cartString = cart[1];
+        var cartString = cart[1] + "\n\n";
         for(i=2; i < cart.length; i++){
-          cartString = cartString + cart[i];
+          cartString = cartString + cart[i] + "\n\n";
         }
         cart = cartString;
         var first_name = customer[0];
