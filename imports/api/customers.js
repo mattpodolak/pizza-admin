@@ -224,13 +224,19 @@ if (Meteor.isServer) {
                 print: 12
               },
             });
+            var total = Number(order.delivery) + Number(order.tax) + Number(order.subtotal);
             var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
             if(customer == null){
               console.log("COULDN'T FIND CUSTOMER")
-              var printBody = "PIZZA PALACE [nl] Order Num: " + order.orderNum + "[nl]" +  order.cart;
-            }
+              var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
+               "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: " + order.subtotal + 
+               "\nDelivery: " + order.delivery + "\nTax: " + order.tax + "\nTOTAL: " + total;            }
             else{
-              var printBody = "PIZZA PALACE [nl] Order Num: " + order.orderNum + "[nl]" +  order.cart;
+              var printBody = "PIZZA PALACE \n\n Order Num: " + order.orderNum + "\nPhone: " + order.phone +
+               "\n Customer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
+               "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
+               "\nDelivery Choice: " + order.deliveryType + "\n\nORDER: \n" + order.cart + "\n\nSubtotal: " + order.subtotal + 
+               "\nDelivery: " + order.delivery + "\nTax: " + order.tax + "\nTOTAL: " + total;
             }
             //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
             console.log("Print next order thats ready")
