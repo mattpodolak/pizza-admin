@@ -226,8 +226,15 @@ if (Meteor.isServer) {
             });
             //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
             console.log("Print next order thats ready")
-            return {"jobReady": "true", "mediaTypes":  [ "text/plain" ], "display": [{"name": "<deviceName>", "message": "HELLLOO [nl] HELO?"}]}
-            //return {"Status": "200",  "Message": "order"}
+            //return {"jobReady": "true", "mediaTypes":  [ "text/plain" ], "display": [{"name": "<deviceName>", "message": "HELLLOO [nl] HELO?"}]}
+            return {
+              'statusCode': 200,
+              headers: {
+                'Content-Type': 'text/plain',
+                'Status': 200
+              },
+              body: 'There is nothing here!'
+            }
           }
         }
         else{
