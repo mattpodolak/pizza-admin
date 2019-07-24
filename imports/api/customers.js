@@ -12,7 +12,7 @@ Meteor.methods({
     check(phone, String);
     check(user, String);
     if(user == "Napoli"){
-      var printNum = 1;
+      var printNum = 11;
     }
     else if(user == "Palace"){
       var printNum = 11;
@@ -408,18 +408,118 @@ if (Meteor.isServer) {
             order.deliver = Number(order.delivery).toFixed(2)
             total = total.toFixed(2);
             var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
+            var cartString = '';
+
+            for(var i=0; i<order.cart.length; i++){
+              var orderInfo = cart[i]
+              cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
+              if(orderInfo.pizzaTop1 != null){
+                cartString = cartString + '\n Pizza 1 Toppings: '
+                if(orderInfo.pizzaTop1.length == 0){
+                  cartString = cartString  +  "No toppings"
+                }
+                else{
+                  for(var k=0; k<orderInfo.pizzaTop1.length; k++){
+                    cartString = cartString + orderInfo.pizzaTop1[k] + " "
+                  }
+                }
+              }
+
+              if(orderInfo.pizzaTop2 != null){
+                cartString = cartString + '\n Pizza 2 Toppings: '
+                if(orderInfo.pizzaTop2.length == 0){
+                  cartString = cartString  +  "No toppings"
+                }
+                else{
+                  for(var k=0; k<orderInfo.pizzaTop2.length; k++){
+                    cartString = cartString + orderInfo.pizzaTop2[k] + " "
+                  }
+                }
+              }
+
+              if(orderInfo.pizzaTop3 != null){
+                cartString = cartString + '\n Pizza 3 Toppings: '
+                if(orderInfo.pizzaTop3.length == 0){
+                  cartString = cartString  +  "No toppings"
+                }
+                else{
+                  for(var k=0; k<orderInfo.pizzaTop3.length; k++){
+                    cartString = cartString + orderInfo.pizzaTop3[k] + " "
+                  }
+                }
+              }
+
+              if(orderInfo.pizzaTop4 != null){
+                cartString = cartString + '\n Pizza 4 Toppings: '
+                if(orderInfo.pizzaTop4.length == 0){
+                  cartString = cartString  +  "No toppings"
+                }
+                else{
+                  for(var k=0; k<orderInfo.pizzaTop4.length; k++){
+                    cartString = cartString + orderInfo.pizzaTop4[k] + " "
+                  }
+                }
+              }    
+              if(orderInfo.pop1 != null){
+                cartString = cartString + "\nPop: " + orderInfo.pop1;
+                if(orderInfo.pop2 != null){
+                  cartString = cartString + " " + orderInfo.pop2;
+                }
+                if(orderInfo.pop3 != null){
+                  cartString = cartString + " " + orderInfo.pop3;
+                }
+                if(orderInfo.pop4 != null){
+                  cartString = cartString + " " + orderInfo.pop4;
+                }
+                if(orderInfo.pop5 != null){
+                  cartString = cartString + " " + orderInfo.pop5;
+                }
+                if(orderInfo.pop6 != null){
+                  cartString = cartString + " " + orderInfo.pop6;
+                }
+              } 
+
+              if(orderInfo.dip1 != null){
+                cartString = cartString + "\nDip: " + orderInfo.dip1;
+                if(orderInfo.dip2 != null){
+                  cartString = cartString + " " + orderInfo.dip2;
+                }
+                if(orderInfo.dip3 != null){
+                  cartString = cartString + " " + orderInfo.dip3;
+                }
+                if(orderInfo.dip4 != null){
+                  cartString = cartString + " " + orderInfo.dip4;
+                }
+                if(orderInfo.dip5 != null){
+                  cartString = cartString + " " + orderInfo.dip5;
+                }
+                if(orderInfo.dip6 != null){
+                  cartString = cartString + " " + orderInfo.dip6;
+                }
+              }
+
+              if(orderInfo.wings != null){
+                cartString = cartString + '\n Wings: ' + orderInfo.wings;
+              }
+              if(orderInfo.chips != null){
+                cartString = cartString + '\n Chips: ' + orderInfo.chips;
+              }
+              if(orderInfo.pasta != null){
+                cartString = cartString + '\n Pasta: ' + orderInfo.pasta;
+              }
+            }
             if(customer == null){
               console.log("COULDN'T FIND CUSTOMER")
               var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
                "\nDelivery Choice: " + order.deliveryType  + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions +                
-               "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+               "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
                "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
             else{
-              var printBody = "PIZZA PALACE \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+              var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
                "\nCustomer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
                "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
                "\nDelivery Choice: " + order.deliveryType + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions + 
-               "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+               "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
                "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
             }
             //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
@@ -450,18 +550,118 @@ if (Meteor.isServer) {
           order.deliver = Number(order.delivery).toFixed(2)
           total = total.toFixed(2);
           var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
+          var cartString = '';
+
+          for(var i=0; i<order.cart.length; i++){
+            var orderInfo = cart[i]
+            cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
+            if(orderInfo.pizzaTop1 != null){
+              cartString = cartString + '\n Pizza 1 Toppings: '
+              if(orderInfo.pizzaTop1.length == 0){
+                cartString = cartString  +  "No toppings"
+              }
+              else{
+                for(var k=0; k<orderInfo.pizzaTop1.length; k++){
+                  cartString = cartString + orderInfo.pizzaTop1[k] + " "
+                }
+              }
+            }
+
+            if(orderInfo.pizzaTop2 != null){
+              cartString = cartString + '\n Pizza 2 Toppings: '
+              if(orderInfo.pizzaTop2.length == 0){
+                cartString = cartString  +  "No toppings"
+              }
+              else{
+                for(var k=0; k<orderInfo.pizzaTop2.length; k++){
+                  cartString = cartString + orderInfo.pizzaTop2[k] + " "
+                }
+              }
+            }
+
+            if(orderInfo.pizzaTop3 != null){
+              cartString = cartString + '\n Pizza 3 Toppings: '
+              if(orderInfo.pizzaTop3.length == 0){
+                cartString = cartString  +  "No toppings"
+              }
+              else{
+                for(var k=0; k<orderInfo.pizzaTop3.length; k++){
+                  cartString = cartString + orderInfo.pizzaTop3[k] + " "
+                }
+              }
+            }
+
+            if(orderInfo.pizzaTop4 != null){
+              cartString = cartString + '\n Pizza 4 Toppings: '
+              if(orderInfo.pizzaTop4.length == 0){
+                cartString = cartString  +  "No toppings"
+              }
+              else{
+                for(var k=0; k<orderInfo.pizzaTop4.length; k++){
+                  cartString = cartString + orderInfo.pizzaTop4[k] + " "
+                }
+              }
+            }    
+            if(orderInfo.pop1 != null){
+              cartString = cartString + "\nPop: " + orderInfo.pop1;
+              if(orderInfo.pop2 != null){
+                cartString = cartString + " " + orderInfo.pop2;
+              }
+              if(orderInfo.pop3 != null){
+                cartString = cartString + " " + orderInfo.pop3;
+              }
+              if(orderInfo.pop4 != null){
+                cartString = cartString + " " + orderInfo.pop4;
+              }
+              if(orderInfo.pop5 != null){
+                cartString = cartString + " " + orderInfo.pop5;
+              }
+              if(orderInfo.pop6 != null){
+                cartString = cartString + " " + orderInfo.pop6;
+              }
+            } 
+
+            if(orderInfo.dip1 != null){
+              cartString = cartString + "\nDip: " + orderInfo.dip1;
+              if(orderInfo.dip2 != null){
+                cartString = cartString + " " + orderInfo.dip2;
+              }
+              if(orderInfo.dip3 != null){
+                cartString = cartString + " " + orderInfo.dip3;
+              }
+              if(orderInfo.dip4 != null){
+                cartString = cartString + " " + orderInfo.dip4;
+              }
+              if(orderInfo.dip5 != null){
+                cartString = cartString + " " + orderInfo.dip5;
+              }
+              if(orderInfo.dip6 != null){
+                cartString = cartString + " " + orderInfo.dip6;
+              }
+            }
+
+            if(orderInfo.wings != null){
+              cartString = cartString + '\n Wings: ' + orderInfo.wings;
+            }
+            if(orderInfo.chips != null){
+              cartString = cartString + '\n Chips: ' + orderInfo.chips;
+            }
+            if(orderInfo.pasta != null){
+              cartString = cartString + '\n Pasta: ' + orderInfo.pasta;
+            }
+          }
           if(customer == null){
             console.log("COULDN'T FIND CUSTOMER")
             var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
              "\nDelivery Choice: " + order.deliveryType  + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions +                
-             "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+             "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
              "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
           else{
-            var printBody = "PIZZA PALACE \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+            var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
              "\nCustomer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
              "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
              "\nDelivery Choice: " + order.deliveryType + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions + 
-             "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+             "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
              "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
           }
           //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
