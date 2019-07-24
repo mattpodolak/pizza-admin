@@ -8,7 +8,7 @@ export const CustomerCollection = new Mongo.Collection('customerCollection');
 export const OrderCollection = new Mongo.Collection('orderCollection');
 
 Meteor.methods({
-  'orderCollection.insert'(phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user) {
+  'orderCollection.insert'(phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user) {
     check(phone, String);
     check(user, String);
     if(user == "Napoli"){
@@ -26,6 +26,8 @@ Meteor.methods({
       cart,
       orderNum,
       deliveryType,
+      paymentType,
+      instructions,
       subtotal,
       tax,
       delivery,
@@ -384,6 +386,8 @@ if (Meteor.isServer) {
         var address_two = customer[5];
         var postal_code = customer[7];
         var city = customer[6];
+        var paymentType = null;
+        var instructions = null;
 
         phone = phone.replace('Phone: ','');
         first_name = first_name.replace('Name: ','');
@@ -396,7 +400,7 @@ if (Meteor.isServer) {
         tax = tax.toFixed(2);
 
         console.log("Cart: ", cart);
-        Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
+        Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user);
         Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
         return {"status": "success"}
       }
@@ -405,7 +409,16 @@ if (Meteor.isServer) {
     Api.addRoute('order', {authRequired: true}, {
       post: function () {
         var phone = this.bodyParams.phone, cart= this.bodyParams.cart, orderNum= this.bodyParams.orderNum, deliveryType= this.bodyParams.deliveryType, subtotal=this.bodyParams.subtotal, tax=this.bodyParams.tax, delivery=this.bodyParams.delivery, tip=this.bodyParams.tip, user =this.bodyParams.user;
-        Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, subtotal, tax, delivery, tip, user);
+        var paymentType = null;
+        var instructions = null;
+        Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user);
+        return {"status": "success"}
+      }
+    });
+      Api.addRoute('order2', {authRequired: true}, {
+      post: function () {
+        var phone = this.bodyParams.phone, cart= this.bodyParams.cart, orderNum= this.bodyParams.orderNum, deliveryType= this.bodyParams.deliveryType, paymentType= this.bodyParams.paymentType, instructions= this.bodyParams.instructions, subtotal=this.bodyParams.subtotal, tax=this.bodyParams.tax, delivery=this.bodyParams.delivery, tip=this.bodyParams.tip, user =this.bodyParams.user;
+        Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user);
         return {"status": "success"}
       }
     });
