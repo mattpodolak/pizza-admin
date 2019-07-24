@@ -336,6 +336,188 @@ if (Meteor.isServer) {
       }
     });
 
+    Api.addRoute('print/3/:user', {authRequired: false}, {
+      post: function () {
+        // set variables
+        var userName = this.urlParams.user
+        var statuscode = this.bodyParams.statusCode
+        var requestBody = this.bodyParams
+        console.log("status ", statuscode)
+        console.log(requestBody)
+        //check status code if 2xx turn any print: 12 jobs to print: 10 as they printed fine, otherwise set to print 11
+        if(statuscode.charAt(0) == "2"){
+          //attempted print job succeeded, no longer needs to be printed
+          var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
+          if(order != null){
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 10
+              },
+            });
+          }
+        }
+        else{
+          //attempted print job failed, still needs to be printed
+          var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
+          if(order != null){
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 11
+              },
+            });
+          }
+        }
+        //check if any orders need to be printed still
+        var order = OrderCollection.findOne({print: 11, user: userName}, { sort: { createdAt: 1 } })
+        if(order == null){
+          //no orders to print
+          console.log("No orders to print")
+          return {"jobReady": "false"}
+        }
+        else{
+          //order to print
+          //return {"jobReady": "true", "mediaTypes":  [ "image/png", "text/plain" ]}
+          console.log("Orders to print")
+          return {"jobReady": "true", "mediaTypes":  [ "text/plain" ]}
+        }
+      },
+      get: function () {
+        var userName = this.urlParams.user
+        //see if order needs to be re-downloaded
+        var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
+        if(order == null){
+          //if no orders to be redownloaded, print next order thats ready
+          var order = OrderCollection.findOne({print: 11, user: userName}, { sort: { createdAt: 1 } })
+          if(order == null){
+            //error encountered
+            console.log("Error encountered")
+            return {"Status": "404"}
+          }
+          else{
+            //print order
+            //print 12 - not disregarded until confirm code gotten from POST
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 12
+              },
+            });
+            var total = Number(order.delivery) + Number(order.tax) + Number(order.subtotal);
+            order.deliver = Number(order.delivery).toFixed(2)
+            total = total.toFixed(2);
+            var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
+            if(customer == null){
+              console.log("COULDN'T FIND CUSTOMER")
+              var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+               "\nDelivery Choice: " + order.deliveryType  + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions +                
+               "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+               "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
+            else{
+              var printBody = "PIZZA PALACE \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+               "\nCustomer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
+               "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
+               "\nDelivery Choice: " + order.deliveryType + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions + 
+               "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+               "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
+            }
+            //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
+            console.log("Print next order thats ready")
+            //return {"jobReady": "true", "mediaTypes":  [ "text/plain" ], "display": [{"name": "<deviceName>", "message": "HELLLOO [nl] HELO?"}]}
+            return {
+              'statusCode': 200,
+              headers: {
+                'Content-Type': 'text/plain',
+                'Status': 200
+              },
+              body: printBody
+            }
+          }
+        }
+        else{
+          //print order
+          //print 12 - not disregarded until confirm code gotten from POST
+          OrderCollection.update(order._id, {
+            $set: 
+            {
+              print: 12
+            },
+          });
+          console.log("Reprint order that didn't delete")
+          //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
+          var total = Number(order.delivery) + Number(order.tax) + Number(order.subtotal);
+          order.deliver = Number(order.delivery).toFixed(2)
+          total = total.toFixed(2);
+          var customer =  CustomerCollection.findOne({phone: order.phone, user: userName})
+          if(customer == null){
+            console.log("COULDN'T FIND CUSTOMER")
+            var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+             "\nDelivery Choice: " + order.deliveryType  + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions +                
+             "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+             "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
+          else{
+            var printBody = "PIZZA PALACE \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+             "\nCustomer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
+             "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
+             "\nDelivery Choice: " + order.deliveryType + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions + 
+             "\n\nORDER: \n" + order.cart + "\n\nSubtotal: \t" + order.subtotal + 
+             "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
+          }
+          //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
+          console.log("Print next order thats ready")
+          //return {"jobReady": "true", "mediaTypes":  [ "text/plain" ], "display": [{"name": "<deviceName>", "message": "HELLLOO [nl] HELO?"}]}
+          return {
+            'statusCode': 200,
+            headers: {
+              'Content-Type': 'text/plain',
+              'Status': 200
+            },
+            body: printBody
+          }
+        }
+      },
+      delete: function () {
+        //incase cant handle print
+        //turn any print: 12 jobs to print: 11 as they didnt print
+        var userName = this.urlParams.user
+        if(userName == "Napoli"){
+          userName = "Palace";
+        }
+        var query = this.queryParams;
+        var statuscode = query.code
+        console.log("code ", statuscode)
+        console.log("delete  ", query)
+        //check status code if 2xx turn any print: 12 jobs to print: 10 as they printed fine, otherwise set to print 11
+        if(statuscode.charAt(0) == "2"){
+          //attempted print job succeeded, no longer needs to be printed
+          var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
+          if(order != null){
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 10
+              },
+            });
+          }
+        }
+        else{
+          //print failed, because printer couldn't handle the data
+          var order = OrderCollection.findOne({print: 12, user: userName}, { sort: { createdAt: 1 } })
+          if(order != null){
+            OrderCollection.update(order._id, {
+              $set: 
+              {
+                print: 11
+              },
+            });
+          }
+        }
+        console.log("Delete order")
+        return {"Status": "200"}
+      }
+    });
+
     Api.addRoute('receipt/:user', {authRequired: true}, {
       get: function () {
         var userName = this.urlParams.user
