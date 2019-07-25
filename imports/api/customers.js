@@ -509,6 +509,7 @@ if (Meteor.isServer) {
                 cartString = cartString + '\n Pasta: ' + orderInfo.pasta;
               }
             }
+            console.log(cartString)
             if(customer == null){
               console.log("COULDN'T FIND CUSTOMER")
               var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + '\n' + new Date() +  "\nPhone: " + order.phone +
@@ -555,6 +556,7 @@ if (Meteor.isServer) {
 
           for(var i=0; i<order.cart.length; i++){
             var orderInfo = order.cart[i]
+            console.log(orderInfo)
             cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
             if(orderInfo.pizzaTop1 != null){
               cartString = cartString + '\n Pizza 1 Toppings: '
@@ -651,6 +653,7 @@ if (Meteor.isServer) {
               cartString = cartString + '\n Pasta: ' + orderInfo.pasta;
             }
           }
+          console.log(cartString)
           if(customer == null){
             console.log("COULDN'T FIND CUSTOMER")
             var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + '\n' + new Date() + "\nPhone: " + order.phone +
