@@ -412,8 +412,8 @@ if (Meteor.isServer) {
 
             for(var i=0; i<order.cart.length; i++){
               var orderInfo = order.cart[i]
-              console.log(order.cart[i])
-              console.log(orderInfo)
+              console.log('DIRECT', order.cart[i])
+              console.log('INDIRECT', orderInfo)
               cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
               if(orderInfo.pizzaTop1 != null){
                 cartString = cartString + '\n Pizza 1 Toppings: '
@@ -510,7 +510,7 @@ if (Meteor.isServer) {
                 cartString = cartString + '\n Pasta: ' + orderInfo.pasta;
               }
             }
-            console.log(cartString)
+            console.log('POSTCART', cartString)
             if(customer == null){
               console.log("COULDN'T FIND CUSTOMER")
               var printBody = "NAPOLI PIZZA \n\nOrder Num: " + order.orderNum + '\n' + new Date() +  "\nPhone: " + order.phone +
@@ -556,9 +556,9 @@ if (Meteor.isServer) {
           var cartString = '';
 
           for(var i=0; i<order.cart.length; i++){
-            console.log(order.cart[i])
+            console.log('DIRECT', order.cart[i])
             var orderInfo = order.cart[i]
-            console.log(orderInfo)
+            console.log('INDIRECT', orderInfo)
             cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
             if(orderInfo.pizzaTop1 != null){
               cartString = cartString + '\n Pizza 1 Toppings: '
@@ -655,7 +655,7 @@ if (Meteor.isServer) {
               cartString = cartString + '\n Pasta: ' + orderInfo.pasta;
             }
           }
-          console.log(cartString)
+          console.log('POSTCART', cartString)
           if(customer == null){
             console.log("COULDN'T FIND CUSTOMER")
             var printBody = "NAPOLI PIZZA \n\nOrder Num: " + order.orderNum + '\n' + new Date() + "\nPhone: " + order.phone +
@@ -806,7 +806,7 @@ if (Meteor.isServer) {
       Api.addRoute('order2', {authRequired: true}, {
       post: function () {
         var phone = this.bodyParams.phone, cart= this.bodyParams.cart, orderNum= this.bodyParams.orderNum, deliveryType= this.bodyParams.deliveryType, paymentType= this.bodyParams.paymentType, instructions= this.bodyParams.instructions, subtotal=this.bodyParams.subtotal, tax=this.bodyParams.tax, delivery=this.bodyParams.delivery, tip=this.bodyParams.tip, user =this.bodyParams.user;
-        console.log(cart)
+        console.log('ORDER2', cart)
         Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user);
         return {"status": "success"}
       }
