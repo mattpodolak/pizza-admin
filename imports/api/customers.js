@@ -461,7 +461,7 @@ if (Meteor.isServer) {
                 }
               }    
               if(orderInfo.pop1 != null){
-                cartString = cartString + "\nPop: " + orderInfo.pop1;
+                cartString = cartString + "\n Pop: " + orderInfo.pop1;
                 if(orderInfo.pop2 != null){
                   cartString = cartString + " " + orderInfo.pop2;
                 }
@@ -480,7 +480,7 @@ if (Meteor.isServer) {
               } 
 
               if(orderInfo.dip1 != null){
-                cartString = cartString + "\nDip: " + orderInfo.dip1;
+                cartString = cartString + "\n Dip: " + orderInfo.dip1;
                 if(orderInfo.dip2 != null){
                   cartString = cartString + " " + orderInfo.dip2;
                 }
@@ -510,17 +510,17 @@ if (Meteor.isServer) {
             }
             if(customer == null){
               console.log("COULDN'T FIND CUSTOMER")
-              var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+              var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + '\n' + new Date() +  "\nPhone: " + order.phone +
                "\nDelivery Choice: " + order.deliveryType  + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions +                
                "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
-               "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
+               "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total +'\n\n';            }
             else{
-              var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+              var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + '\n' + new Date() +  "\nPhone: " + order.phone +
                "\nCustomer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
                "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
                "\nDelivery Choice: " + order.deliveryType + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions + 
                "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
-               "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
+               "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total +'\n\n';
             }
             //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
             console.log("Print next order thats ready")
@@ -603,7 +603,7 @@ if (Meteor.isServer) {
               }
             }    
             if(orderInfo.pop1 != null){
-              cartString = cartString + "\nPop: " + orderInfo.pop1;
+              cartString = cartString + "\n Pop: " + orderInfo.pop1;
               if(orderInfo.pop2 != null){
                 cartString = cartString + " " + orderInfo.pop2;
               }
@@ -622,7 +622,7 @@ if (Meteor.isServer) {
             } 
 
             if(orderInfo.dip1 != null){
-              cartString = cartString + "\nDip: " + orderInfo.dip1;
+              cartString = cartString + "\n Dip: " + orderInfo.dip1;
               if(orderInfo.dip2 != null){
                 cartString = cartString + " " + orderInfo.dip2;
               }
@@ -652,17 +652,17 @@ if (Meteor.isServer) {
           }
           if(customer == null){
             console.log("COULDN'T FIND CUSTOMER")
-            var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+            var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + '\n' + new Date() + "\nPhone: " + order.phone +
              "\nDelivery Choice: " + order.deliveryType  + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions +                
              "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
-             "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;            }
+             "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total+'\n\n';            }
           else{
-            var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + "\nPhone: " + order.phone +
+            var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + '\n' + new Date() + "\nPhone: " + order.phone +
              "\nCustomer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
              "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
              "\nDelivery Choice: " + order.deliveryType + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions + 
              "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
-             "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total;
+             "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total +'\n\n';
           }
           //return {"Status": "200", "X-Star-Cut": "full; feed=true",  "Message": "order"}
           console.log("Print next order thats ready")
