@@ -414,7 +414,7 @@ if (Meteor.isServer) {
               var orderInfo = order.cart[i]
               console.log('DIRECT', order.cart[i])
               console.log('INDIRECT', orderInfo)
-              cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
+              cartString = cartString + '\n\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
               if(orderInfo.pizzaTop1 != null){
                 cartString = cartString + '\n Pizza 1 Toppings: '
                 if(orderInfo.pizzaTop1.length == 0){
@@ -559,7 +559,7 @@ if (Meteor.isServer) {
             console.log('DIRECT', order.cart[i])
             var orderInfo = order.cart[i]
             console.log('INDIRECT', orderInfo)
-            cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
+            cartString = cartString + '\n\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
             if(orderInfo.pizzaTop1 != null){
               cartString = cartString + '\n Pizza 1 Toppings: '
               if(orderInfo.pizzaTop1.length == 0){
