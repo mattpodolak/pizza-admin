@@ -412,6 +412,7 @@ if (Meteor.isServer) {
 
             for(var i=0; i<order.cart.length; i++){
               var orderInfo = order.cart[i]
+              console.log(order.cart[i])
               console.log(orderInfo)
               cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
               if(orderInfo.pizzaTop1 != null){
@@ -512,12 +513,12 @@ if (Meteor.isServer) {
             console.log(cartString)
             if(customer == null){
               console.log("COULDN'T FIND CUSTOMER")
-              var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + '\n' + new Date() +  "\nPhone: " + order.phone +
+              var printBody = "NAPOLI PIZZA \n\nOrder Num: " + order.orderNum + '\n' + new Date() +  "\nPhone: " + order.phone +
                "\nDelivery Choice: " + order.deliveryType  + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions +                
                "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
                "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total +'\n\n';            }
             else{
-              var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + '\n' + new Date() +  "\nPhone: " + order.phone +
+              var printBody = "NAPOLI PIZZA \n\nOrder Num: " + order.orderNum + '\n' + new Date() +  "\nPhone: " + order.phone +
                "\nCustomer: " + customer.first_name + " " + customer.last_name + "\nAddress 1: " + customer.address_one + 
                "\nAddress 2: " + customer.address_two + "\nPostal Code: " + customer.postal_code + "\nCity: " + customer.city + 
                "\nDelivery Choice: " + order.deliveryType + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions + 
@@ -555,6 +556,7 @@ if (Meteor.isServer) {
           var cartString = '';
 
           for(var i=0; i<order.cart.length; i++){
+            console.log(order.cart[i])
             var orderInfo = order.cart[i]
             console.log(orderInfo)
             cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
@@ -656,7 +658,7 @@ if (Meteor.isServer) {
           console.log(cartString)
           if(customer == null){
             console.log("COULDN'T FIND CUSTOMER")
-            var printBody = "NAPOLI \n\nOrder Num: " + order.orderNum + '\n' + new Date() + "\nPhone: " + order.phone +
+            var printBody = "NAPOLI PIZZA \n\nOrder Num: " + order.orderNum + '\n' + new Date() + "\nPhone: " + order.phone +
              "\nDelivery Choice: " + order.deliveryType  + "\nPayment Choice: " + order.paymentType + "\nDelivery Instructions: " + order.instructions +                
              "\n\nORDER:" + cartString + "\n\nSubtotal: \t" + order.subtotal + 
              "\nDelivery: \t" + order.delivery + "\nTax: \t" + order.tax + "\nTOTAL: \t" + total+'\n\n';            }
