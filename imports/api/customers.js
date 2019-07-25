@@ -412,6 +412,7 @@ if (Meteor.isServer) {
 
             for(var i=0; i<order.cart.length; i++){
               var orderInfo = order.cart[i]
+              console.log(orderInfo)
               cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
               if(orderInfo.pizzaTop1 != null){
                 cartString = cartString + '\n Pizza 1 Toppings: '
