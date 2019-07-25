@@ -411,7 +411,7 @@ if (Meteor.isServer) {
             var cartString = '';
 
             for(var i=0; i<order.cart.length; i++){
-              var orderInfo = cart[i]
+              var orderInfo = order.cart[i]
               cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
               if(orderInfo.pizzaTop1 != null){
                 cartString = cartString + '\n Pizza 1 Toppings: '
@@ -553,7 +553,7 @@ if (Meteor.isServer) {
           var cartString = '';
 
           for(var i=0; i<order.cart.length; i++){
-            var orderInfo = cart[i]
+            var orderInfo = order.cart[i]
             cartString = cartString + '\n' + String(orderInfo.itemName) + '\n Addon: ' + String(orderInfo.addonValue);
             if(orderInfo.pizzaTop1 != null){
               cartString = cartString + '\n Pizza 1 Toppings: '
