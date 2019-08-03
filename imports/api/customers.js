@@ -2,95 +2,12 @@
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
-import { Restivus } from 'meteor/nimble:restivus'
+import { Restivus } from 'meteor/nimble:restivus';
+import { HTTP } from 'meteor/http';
 
 export const CustomerCollection = new Mongo.Collection('customerCollection');
 export const OrderCollection = new Mongo.Collection('orderCollection');
-
-Meteor.methods({
-  'orderCollection.insert'(phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user) {
-    check(phone, String);
-    check(user, String);
-    if(user == "Napoli"){
-      var printNum = 11;
-    }
-    else if(user == "Palace"){
-      var printNum = 11;
-    }
-    else{
-      var printNum = 111;
-    }
-    console.log('inserted into order db')
-    OrderCollection.insert({
-      phone,
-      cart,
-      orderNum,
-      deliveryType,
-      paymentType,
-      instructions,
-      subtotal,
-      tax,
-      delivery,
-      tip,
-      user,
-      print: printNum,
-      createdAt: new Date()
-    });
-  },
-  'customerCollection.insert'(first_name, last_name, phone, address_one, address_two, postal_code, city, user) {
-    check(first_name, String);
-    check(last_name, String);
-    check(phone, String);
-    check(address_one, String);
-    check(address_two, String);
-    check(postal_code, String);
-    check(city, String);
-    console.log('HELLLO')
-    var customer =  CustomerCollection.findOne({phone: phone, user: user})
-    if(customer == null){
-      console.log('inserted into db')
-      CustomerCollection.insert({
-        first_name,
-        last_name,
-        phone,
-        address_one,
-        address_two,
-        postal_code,
-        city,
-        user,
-        createdAt: new Date()
-      });
-    }
-    else{
-      console.log('updating db')
-      CustomerCollection.update(customer._id, {
-        $set: 
-        {
-          first_name: first_name,
-          last_name: last_name,
-          phone: phone,
-          address_one: address_one,
-          postal_code: postal_code,
-          city: city,
-          user: user,
-          createdAt: new Date()
-        },
-      });
-    }
-  },
-  // 'tasks.remove'(taskId) {
-  //   check(taskId, String);
- 
-  //   Tasks.remove(taskId);
-  // },
-  // 'tasks.setChecked'(taskId, setChecked) {
-  //   check(taskId, String);
-  //   check(setChecked, Boolean);
- 
-  //   Tasks.update(taskId, { $set: { checked: setChecked } });
-  // },
-});
-
+export const StripeTokenCollection = new Mongo.Collection('stripeTokenCollection');
 
 if (Meteor.isServer) {
     // This code only runs on the server
@@ -100,6 +17,133 @@ if (Meteor.isServer) {
     Meteor.publish('orderCollection', function orderCollectionPublication() {
       return OrderCollection.find();
     });
+    Meteor.publish('stripeTokenCollection', function stripeTokenCollectionPublication() {
+      return StripeTokenCollection.find();
+    });
+  
+  }
+
+  Meteor.methods({
+    'stripeTokenCollection.insert'(auth_code) {
+      if(! this.isSimulation){
+  
+      //check if logged in
+      if (! Meteor.userId()) {
+        throw new Meteor.Error('not-authorized');
+      }
+    
+      const client_secret = Meteor.settings.stripe;
+  
+      //Make API request here
+      try {
+        const result = HTTP.call('POST', 'https://connect.stripe.com/oauth/token', {
+          data: { 
+            client_secret: client_secret,
+            code: auth_code,
+            grant_type: "authorization_code"
+          }
+        });
+
+      const stripe_user_id = result.data.stripe_user_id;
+      const user = Meteor.userId();
+
+      StripeTokenCollection.insert({
+        stripe_user_id,
+        user,
+        createdAt: new Date()
+      });
+      return true
+      }
+      catch(e){
+        console.log(e)
+        return false
+      }
+    }
+    },
+    'orderCollection.insert'(phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user) {
+      check(phone, String);
+      check(user, String);
+      if(user == "Napoli"){
+        var printNum = 11;
+      }
+      else if(user == "Palace"){
+        var printNum = 11;
+      }
+      else{
+        var printNum = 111;
+      }
+      console.log('inserted into order db')
+      OrderCollection.insert({
+        phone,
+        cart,
+        orderNum,
+        deliveryType,
+        paymentType,
+        instructions,
+        subtotal,
+        tax,
+        delivery,
+        tip,
+        user,
+        print: printNum,
+        createdAt: new Date()
+      });
+    },
+    'customerCollection.insert'(first_name, last_name, phone, address_one, address_two, postal_code, city, user) {
+      check(first_name, String);
+      check(last_name, String);
+      check(phone, String);
+      check(address_one, String);
+      check(address_two, String);
+      check(postal_code, String);
+      check(city, String);
+      console.log('HELLLO')
+      var customer =  CustomerCollection.findOne({phone: phone, user: user})
+      if(customer == null){
+        console.log('inserted into db')
+        CustomerCollection.insert({
+          first_name,
+          last_name,
+          phone,
+          address_one,
+          address_two,
+          postal_code,
+          city,
+          user,
+          createdAt: new Date()
+        });
+      }
+      else{
+        console.log('updating db')
+        CustomerCollection.update(customer._id, {
+          $set: 
+          {
+            first_name: first_name,
+            last_name: last_name,
+            phone: phone,
+            address_one: address_one,
+            postal_code: postal_code,
+            city: city,
+            user: user,
+            createdAt: new Date()
+          },
+        });
+      }
+    },
+    // 'tasks.remove'(taskId) {
+    //   check(taskId, String);
+   
+    //   Tasks.remove(taskId);
+    // },
+    // 'tasks.setChecked'(taskId, setChecked) {
+    //   check(taskId, String);
+    //   check(setChecked, Boolean);
+   
+    //   Tasks.update(taskId, { $set: { checked: setChecked } });
+    // },
+  });
+
+  if (Meteor.isServer) {
     // Global API configuration
     var Api = new Restivus({
       useDefaultAuth: true,
@@ -130,6 +174,57 @@ if (Meteor.isServer) {
         var first_name = this.bodyParams.first_name, last_name= this.bodyParams.last_name, phone= this.bodyParams.phone, address_one= this.bodyParams.address_one, address_two= this.bodyParams.address_two, postal_code= this.bodyParams.postal_code, city= this.bodyParams.city, user=this.bodyParams.user;
         Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
         return {"status": "success"}
+      }
+    });
+
+    Api.addRoute('pay', {authRequired: true}, {
+      //send payment through Stripe to connected account
+      post: function () {
+        //get Stripe token from authenticated user
+        var token =  StripeTokenCollection.findOne({user: this.user.userId})
+        if(token.stripe_user_id == null){
+          return {"status": 400, "message": "Missing Stripe Token"}
+        }
+        //send payment request to Stripe
+        const stripe_account_id = token.stripe_user_id;
+        const stripe = require('stripe')(Meteor.settings.stripe);
+        const fee = 200;
+
+        try{
+          //pull info from url
+          const total = this.bodyParams.total;
+          const source_token = this.bodyParams.source_token;
+          
+          Future = Npm.require('fibers/future');
+          var myFuture = new Future();
+
+          stripe.charges.create({
+            amount: total,
+            currency: "cad",
+            source: source_token,
+            application_fee_amount: fee,
+          }, {
+            stripe_account: stripe_account_id,
+          })
+          .then(function(charge) {
+            // asynchronously called
+            myFuture.return(charge);
+          }).catch(function(error){
+            myFuture.return(error);
+          });
+
+          const charge = myFuture.wait();
+
+          if(charge.status == 'succeeded'){
+            return {"status": "success", "charge": charge}
+          }
+          else{
+            return {"status": 400, "message": "charge failed", "charge": charge}
+          }
+        }
+        catch(e){
+          return {"status": 400, "message": e}
+        }
       }
     });
 
