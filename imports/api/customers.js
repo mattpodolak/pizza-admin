@@ -154,7 +154,7 @@ if (Meteor.isServer) {
       
       get: function () {
         var phoneNum = this.urlParams.phone
-        var userName = this.urlParams.user
+        var userName = this.user.username
         var customer =  CustomerCollection.findOne({phone: phoneNum, user: userName})
         var order = OrderCollection.findOne({phone: phoneNum, user: userName}, { sort: { createdAt: -1 } })
         console.log(this.user.username)
@@ -172,6 +172,7 @@ if (Meteor.isServer) {
     Api.addRoute('add', {authRequired: true}, {
       post: function () {
         var first_name = this.bodyParams.first_name, last_name= this.bodyParams.last_name, phone= this.bodyParams.phone, address_one= this.bodyParams.address_one, address_two= this.bodyParams.address_two, postal_code= this.bodyParams.postal_code, city= this.bodyParams.city, user=this.bodyParams.user;
+        var user = this.user.username;
         Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
         return {"status": "success"}
       }
@@ -230,7 +231,7 @@ if (Meteor.isServer) {
 
     Api.addRoute('print/:user', {authRequired: true}, {
       get: function () {
-        var userName = this.urlParams.user
+        var userName = this.user.username;
         var order = OrderCollection.findOne({print: 1, user: userName}, { sort: { createdAt: 1 } })
         if(order == null){
           return {"status": "success", "data": null, "message":"Nothing to print"}
@@ -894,6 +895,7 @@ if (Meteor.isServer) {
         var phone = this.bodyParams.phone, cart= this.bodyParams.cart, orderNum= this.bodyParams.orderNum, deliveryType= this.bodyParams.deliveryType, subtotal=this.bodyParams.subtotal, tax=this.bodyParams.tax, delivery=this.bodyParams.delivery, tip=this.bodyParams.tip, user =this.bodyParams.user;
         var paymentType = null;
         var instructions = null;
+        var user = this.user.username;
         Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user);
         return {"status": "success"}
       }
@@ -902,6 +904,7 @@ if (Meteor.isServer) {
       post: function () {
         var phone = this.bodyParams.phone, cart= this.bodyParams.cart, orderNum= this.bodyParams.orderNum, deliveryType= this.bodyParams.deliveryType, paymentType= this.bodyParams.paymentType, instructions= this.bodyParams.instructions, subtotal=this.bodyParams.subtotal, tax=this.bodyParams.tax, delivery=this.bodyParams.delivery, tip=this.bodyParams.tip, user =this.bodyParams.user;
         console.log('ORDER2', cart)
+        var user = this.user.username;
         Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user);
         return {"status": "success"}
       }
