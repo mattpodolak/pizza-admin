@@ -111,7 +111,7 @@ class Home extends React.Component {
       variant="contained" 
       color="primary" 
       className={classes.button}
-      href="https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_FYGjLVzSTFc7fhWCKmpBCxFJz3lnb8GY&scope=read_write&redirect_uri=http://localhost:3000/home"        
+      href="https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_FYGjLVzSTFc7fhWCKmpBCxFJz3lnb8GY&scope=read_write&redirect_uri=https://pizza-admin.herokuapp.com/home"        
       >
         Link Stripe Account
       </Button>
