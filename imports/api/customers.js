@@ -182,7 +182,8 @@ if (Meteor.isServer) {
       //send payment through Stripe to connected account
       post: function () {
         //get Stripe token from authenticated user
-        var token =  StripeTokenCollection.findOne({user: this.user.userId})
+        var token =  StripeTokenCollection.findOne({user: this.userId})
+        console.log(this.userId)
         if(token.stripe_user_id == null){
           return {"status": 400, "message": "Missing Stripe Token"}
         }
