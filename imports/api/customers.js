@@ -130,17 +130,50 @@ if (Meteor.isServer) {
         });
       }
     },
-    // 'tasks.remove'(taskId) {
-    //   check(taskId, String);
-   
-    //   Tasks.remove(taskId);
-    // },
-    // 'tasks.setChecked'(taskId, setChecked) {
-    //   check(taskId, String);
-    //   check(setChecked, Boolean);
-   
-    //   Tasks.update(taskId, { $set: { checked: setChecked } });
-    // },
+    'customerCollection.insert2'(first_name, last_name, phone, address_one, address_two, postal_code, city, user, userId) {
+      check(first_name, String);
+      check(last_name, String);
+      check(phone, String);
+      check(address_one, String);
+      check(address_two, String);
+      check(postal_code, String);
+      check(city, String);
+      console.log('HELLLO')
+      var customer =  CustomerCollection.findOne({userId: userId, user: user})
+      if(customer == null){
+        console.log('inserted into db')
+        CustomerCollection.insert({
+          first_name,
+          last_name,
+          phone,
+          address_one,
+          address_two,
+          postal_code,
+          city,
+          user,
+          userId,
+          createdAt: new Date()
+        });
+      }
+      else{
+        console.log('updating db')
+        CustomerCollection.update(customer._id, {
+          $set: 
+          {
+            first_name: first_name,
+            last_name: last_name,
+            phone: phone,
+            address_one: address_one,
+            address_two: address_two,
+            postal_code: postal_code,
+            city: city,
+            user: user,
+            userId: userId,
+            createdAt: new Date()
+          },
+        });
+      }
+    },
   });
 
   if (Meteor.isServer) {
@@ -171,9 +204,9 @@ if (Meteor.isServer) {
 
     Api.addRoute('add', {authRequired: true}, {
       post: function () {
-        var first_name = this.bodyParams.first_name, last_name= this.bodyParams.last_name, phone= this.bodyParams.phone, address_one= this.bodyParams.address_one, address_two= this.bodyParams.address_two, postal_code= this.bodyParams.postal_code, city= this.bodyParams.city, user=this.bodyParams.user;
+        var first_name = this.bodyParams.first_name, last_name= this.bodyParams.last_name, phone= this.bodyParams.phone, address_one= this.bodyParams.address_one, address_two= this.bodyParams.address_two, postal_code= this.bodyParams.postal_code, city= this.bodyParams.city, user=this.bodyParams.user, userId =this.bodyParams.userId;
         var user = this.user.username;
-        Meteor.call('customerCollection.insert', first_name, last_name, phone, address_one, address_two, postal_code, city, user);
+        Meteor.call('customerCollection.insert2', first_name, last_name, phone, address_one, address_two, postal_code, city, user, userId);
         return {"status": "success"}
       }
     });
