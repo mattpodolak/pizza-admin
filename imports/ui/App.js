@@ -7,24 +7,25 @@ import { createBrowserHistory } from "history";
 import PropTypes from 'prop-types';
 
 import SignIn from './SignIn.jsx'
-import Profile from './Profile.js';
+//import Profile from './Profile2.js/index.js';
 import Authenticated from './Authenticated.js';
 import Public from './Public.js';
 import Index from './Index.jsx';
 import Home from './Home.jsx';
+import Dashboard from './Dashboard.jsx';
+import Profile from './Profile.jsx';
+import Customers from './Customers.jsx';
+import Orders from './Orders.jsx';
 
 const hist = createBrowserHistory();
 
 const App = appProps => (
     <Router history={hist}>
         <Switch>
-        {/* <Route 
-            exact path="/order-confirm/:id" 
-            component={OrderConfirm}
-        />
-        <Route exact path="/checkout" component={Checkout} />
-        <Route exact path="/cart" component={Cart} />
-        <Route exact path="/menu" component={Menu} /> */}
+        <Authenticated exact path="/dashboard" component={Dashboard} {...appProps}/>
+        <Authenticated exact path="/profile" component={Profile} {...appProps}/>
+        <Authenticated exact path="/customers" component={Customers} {...appProps}/>
+        <Authenticated exact path="/orders" component={Orders} {...appProps}/>
         <Authenticated exact path="/home" component={Home} {...appProps}/>
         <Public exact path="/login" component={SignIn} {...appProps}/>
         <Route exact name="index" path="/" component={Index} />

@@ -29,6 +29,9 @@ import { compose} from 'redux'
 import { withTracker } from 'meteor/react-meteor-data';
 import { StripeTokenCollection } from '../api/customers';
 import { Link } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import OrdersList from './components/OrdersList.jsx'
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -88,19 +91,21 @@ const styles = theme => ({
   button: {
     margin: theme.spacing(1),
   },
+  paper: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
   theme: {
     direction: theme.direction
   }
 });
 
-class Home extends React.Component {
+class Orders extends React.Component {
   state = {
     open: false,
     setOpen: false,
-    loading: false,
-    token: false,
-    urlValues: queryString.parse(this.props.location.search),
-    buttonText: 'Finish Stripe Link'
   }
 
   render(){
@@ -109,74 +114,6 @@ class Home extends React.Component {
       open,
       buttonText
     } = this.state;
-
-    const connectStripeButton = (
-      <Button 
-      variant="contained" 
-      color="primary" 
-      className={classes.button}
-      href="https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_FYGj8PVp7Y8VaLAwIxZ5qyRsbtySQuAf&scope=read_write&redirect_uri=https://pizza-admin.herokuapp.com/home"        
-      >
-        Link Stripe Account
-      </Button>
-    );
-
-    const finishConnectButton = (
-      <Button 
-      variant="contained" 
-      color="primary" 
-      className={classes.button}
-      onClick={() => this.linkStripe()}
-      >
-        {buttonText}
-      </Button>
-    );
-
-    const stripeConnected = (
-      <Typography component="h1" variant="h5">
-      Connected to Stripe
-      </Typography>  
-    );
-
-    const connectError = (
-      <Typography component="h1" variant="h5">
-      {this.state.urlValues.error_description}
-      </Typography>  
-    );
-
-    const connectStripe = (
-      <div>
-      {
-        this.state.urlValues.code == null &&
-        //Not yet started oauth connection
-        connectStripeButton
-      }
-      {
-        this.state.urlValues.code != null &&
-        //Oauth finished - need to save in db
-        finishConnectButton
-      }
-      {
-        this.state.urlValues.error != null &&
-        //Oauth error occured
-        connectError
-      }
-      </div>
-    );
-
-    const stripeButton = (
-      <div>
-      {
-        this.props.token == null &&
-        //No token found in db
-        connectStripe
-      }
-      {
-        this.props.token != null &&
-        stripeConnected
-      }
-      </div>
-    );
 
     return (
       <div className={classes.root}>
@@ -198,7 +135,7 @@ class Home extends React.Component {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Home
+            Orders
           </Typography>
         </Toolbar>
       </AppBar>
@@ -250,9 +187,14 @@ class Home extends React.Component {
       >
         <div className={classes.drawerHeader} />
         <Typography component="h1" variant="h5">
-          Pizza Admin
+          Pizza Admin - Orders
         </Typography>  
-        {stripeButton}
+        <br/>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <OrdersList />
+          </Paper>
+        </Grid>
       </main>
     </div>
     );
@@ -271,26 +213,9 @@ class Home extends React.Component {
   changeButton = (buttonText) => {
     this.setState({ buttonText }); 
   } 
-
-  linkStripe = () => {
-    this.setState({ sendingOrder: true }); 
-    this.changeButton("Linking..");
-
-    const auth_code = this.state.urlValues.code
-
-    Meteor.call("stripeTokenCollection.insert", auth_code, (error, result) => {
-      if (!error && result){
-        //link stripe acct to admin acct
-        this.changeButton("Linked");
-      }
-      else{
-        this.changeButton("Error: Try Again");
-      }
-    });
-  };
 }
 
-Home.propTypes = {
+Orders.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -304,4 +229,4 @@ export default compose(
       token: StripeTokenCollection.findOne({user: Meteor.userId()}),
     };
   })
-)(Home)
+)(Orders)
