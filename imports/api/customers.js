@@ -89,6 +89,36 @@ if (Meteor.isServer) {
         createdAt: new Date()
       });
     },
+    'orderCollection.insert2'(phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user, userId) {
+      check(phone, String);
+      check(user, String);
+      if(user == "Napoli"){
+        var printNum = 11;
+      }
+      else if(user == "Palace"){
+        var printNum = 11;
+      }
+      else{
+        var printNum = 111;
+      }
+      console.log('inserted into order db')
+      OrderCollection.insert({
+        phone,
+        cart,
+        orderNum,
+        deliveryType,
+        paymentType,
+        instructions,
+        subtotal,
+        tax,
+        delivery,
+        tip,
+        user,
+        userId,
+        print: printNum,
+        createdAt: new Date()
+      });
+    },
     'customerCollection.insert'(first_name, last_name, phone, address_one, address_two, postal_code, city, user) {
       check(first_name, String);
       check(last_name, String);
@@ -936,10 +966,10 @@ if (Meteor.isServer) {
     });
       Api.addRoute('order2', {authRequired: true}, {
       post: function () {
-        var phone = this.bodyParams.phone, cart= this.bodyParams.cart, orderNum= this.bodyParams.orderNum, deliveryType= this.bodyParams.deliveryType, paymentType= this.bodyParams.paymentType, instructions= this.bodyParams.instructions, subtotal=this.bodyParams.subtotal, tax=this.bodyParams.tax, delivery=this.bodyParams.delivery, tip=this.bodyParams.tip, user =this.bodyParams.user;
+        var phone = this.bodyParams.phone, cart= this.bodyParams.cart, orderNum= this.bodyParams.orderNum, deliveryType= this.bodyParams.deliveryType, paymentType= this.bodyParams.paymentType, instructions= this.bodyParams.instructions, subtotal=this.bodyParams.subtotal, tax=this.bodyParams.tax, delivery=this.bodyParams.delivery, tip=this.bodyParams.tip, user =this.bodyParams.user, userId =this.bodyParams.userId;
         console.log('ORDER2', cart)
         var user = this.user.username;
-        Meteor.call('orderCollection.insert', phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user);
+        Meteor.call('orderCollection.insert2', phone, cart, orderNum, deliveryType, paymentType, instructions, subtotal, tax, delivery, tip, user, userId);
         return {"status": "success"}
       }
     });
