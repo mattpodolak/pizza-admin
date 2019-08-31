@@ -11,6 +11,7 @@ import { OrderCollection } from '../../api/customers';
 import Link from '@material-ui/core/Link';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import TablePagination from '@material-ui/core/TablePagination';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -27,13 +28,17 @@ class OrdersList extends React.Component {
   state = {
     open: false,
     setOpen: false,
+    page: 0,
+    rowsPerPage: 5
   }
 
   render(){
     const { classes } = this.props;
     const {
       open,
-      buttonText
+      buttonText,
+      page,
+      rowsPerPage
     } = this.state;
 
     if(!Meteor.settings.public.orderdb.includes(Meteor.user().username)){
@@ -45,6 +50,7 @@ class OrdersList extends React.Component {
     }
 
     return (
+      <div>
         <Table size="small">
         <TableHead>
           <TableRow>
@@ -59,7 +65,7 @@ class OrdersList extends React.Component {
         {
             this.props.orders != null &&
             <TableBody>
-            {this.props.orders.map((order) => (
+            {this.props.orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
                 <TableRow key={order._id}>
                 <TableCell>{order.orderNum}</TableCell>
                 <TableCell>{order.phone}</TableCell>
@@ -84,7 +90,36 @@ class OrdersList extends React.Component {
             </TableBody>
         }
       </Table>
+      <TablePagination
+      rowsPerPageOptions={[5, 10, 25]}
+      component="div"
+      count={this.props.orders.length}
+      rowsPerPage={rowsPerPage}
+      page={page}
+      backIconButtonProps={{
+        'aria-label': 'previous page',
+      }}
+      nextIconButtonProps={{
+        'aria-label': 'next page',
+      }}
+      onChangePage={this.handleChangePage}
+      onChangeRowsPerPage={this.handleChangeRowsPerPage}
+    />
+    </div>
     );
+  }
+
+  handleChangePage = (event, newPage) => {
+    this.setState({
+      page: newPage
+    })
+  }
+
+  handleChangeRowsPerPage = (event) => {
+    this.setState({
+      rowsPerPage: event.target.value,
+      page: 0
+    })
   }
 
 }
