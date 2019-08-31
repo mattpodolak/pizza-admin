@@ -14,6 +14,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -34,6 +35,14 @@ class OrdersList extends React.Component {
       open,
       buttonText
     } = this.state;
+
+    if(!Meteor.settings.public.orderdb.includes(Meteor.user().username)){
+      return (
+        <Typography variant="h6" noWrap>
+        Orders DB Addon not added for your account.
+      </Typography>
+      );
+    }
 
     return (
         <Table size="small">
