@@ -8,6 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -23,18 +24,24 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import MailIcon from '@material-ui/icons/Mail';
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 import { Bert } from 'meteor/themeteorchef:bert';
 import queryString from 'query-string'
 import { compose} from 'redux'
 import { withTracker } from 'meteor/react-meteor-data';
 import { StripeTokenCollection } from '../api/customers';
 import { Link } from 'react-router-dom';
+import Deposits from './Deposits';
+import Taxes from './Taxes';
+import Title from './Title';
 
 const drawerWidth = 240;
 const styles = theme => ({
   root: {
     display: 'flex',
   },
+  appBarSpacer: theme.mixins.toolbar,
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -90,7 +97,16 @@ const styles = theme => ({
   },
   theme: {
     direction: theme.direction
-  }
+  },
+  paper: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
+  fixedHeight: {
+    height: 240,
+  },
 });
 
 class Dashboard extends React.Component {
@@ -105,6 +121,8 @@ class Dashboard extends React.Component {
       open,
       buttonText
     } = this.state;
+
+    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
       <div className={classes.root}>
@@ -179,7 +197,24 @@ class Dashboard extends React.Component {
         <div className={classes.drawerHeader} />
         <Typography component="h1" variant="h5">
           Pizza Admin
-        </Typography>  
+        </Typography> 
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
+            {/* Recent Deposits */}
+            <Grid item xs={12} md={4} lg={3}>
+              <Paper className={fixedHeightPaper}>
+                <Deposits />
+              </Paper>
+            </Grid>
+            {/* Recent Taxes */}
+            <Grid item xs={12} md={4} lg={3}>
+              <Paper className={fixedHeightPaper}>
+                <Taxes />
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
       </main>
     </div>
     );
