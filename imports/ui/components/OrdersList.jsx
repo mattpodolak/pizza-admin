@@ -70,7 +70,7 @@ class OrdersList extends React.Component {
                 <TableCell>{order.orderNum}</TableCell>
                 <TableCell>{order.phone}</TableCell>
                 {
-                    order.cart.length > 1 &&
+                    order.cart.length > 0 &&
                     <TableCell>
                     {
                     order.cart.map(cart => (

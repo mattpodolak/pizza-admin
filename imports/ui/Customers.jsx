@@ -188,7 +188,7 @@ class Customers extends React.Component {
       >
         <div className={classes.drawerHeader} />
         <Typography component="h1" variant="h5">
-          Pizza Admin
+          Pizza Admin - Customers
         </Typography>  
         <br/>
         <Grid item xs={12}>
