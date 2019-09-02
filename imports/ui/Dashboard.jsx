@@ -137,7 +137,7 @@ class Dashboard extends React.Component {
     HTTP.call('GET', 'https://www.ordernapolipizza.ca/api/menu', (error, result) => {
       if (!error) {
         this.setState({
-          menu: result.data.menu
+          menu: result.data.menu.mainMenu
         });
       }
     });
