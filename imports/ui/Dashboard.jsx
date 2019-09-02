@@ -36,6 +36,14 @@ import Deposits from './Deposits';
 import Taxes from './Taxes';
 import Title from './Title';
 
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Switch from '@material-ui/core/Switch';
+import { HTTP } from 'meteor/http';
+
 const drawerWidth = 240;
 const styles = theme => ({
   root: {
@@ -113,13 +121,34 @@ class Dashboard extends React.Component {
   state = {
     open: false,
     setOpen: false,
+    buttonText: 'Submit Menu Changes',
+    menu: {
+      pizza_deals: [],
+      specialty: [],
+      freedelivery: [],
+      wingsandsandwiches: [],
+      salads: [],
+      sides: [],
+      pitas: []
+    }
+  }
+
+  componentDidMount() {
+    HTTP.call('GET', 'https://www.ordernapolipizza.ca/api/menu', (error, result) => {
+      if (!error) {
+        this.setState({
+          menu: result.data.menu
+        });
+      }
+    });
   }
 
   render(){
     const { classes } = this.props;
     const {
       open,
-      buttonText
+      buttonText,
+      menu
     } = this.state;
 
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -213,12 +242,117 @@ class Dashboard extends React.Component {
                 <Taxes />
               </Paper>
             </Grid>
+            {/* Menu Management */}
+            <Grid item xs={12} md={8} lg={9}>
+              <Paper className={fixedHeightPaper}>
+                <Title>Menu Management</Title>
+                <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.submitMenu()}>
+                  {buttonText}
+                </Button>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Free Delivery</FormLabel>
+                  <FormGroup>
+                    {     
+                        this.state.menu.freedelivery.map((menuItem) => (
+                          <FormControlLabel
+                          control={<Switch checked={menuItem.active} onChange={this.handleChange('freedelivery', menuItem.name)} value={menuItem.name} />}
+                          label={menuItem.name}
+                        />
+                        ))
+                    }
+                  </FormGroup>
+                  <FormLabel component="legend">Pizza Deals</FormLabel>
+                  <FormGroup>
+                    {     
+                        this.state.menu.pizza_deals.map((menuItem) => (
+                          <FormControlLabel
+                          control={<Switch checked={menuItem.active} onChange={this.handleChange('pizza_deals', menuItem.name)} value={menuItem.name} />}
+                          label={menuItem.name}
+                        />
+                        ))
+                    }
+                  </FormGroup>
+                  <FormLabel component="legend">Specialty Pizza</FormLabel>
+                  <FormGroup>
+                    {     
+                        this.state.menu.specialty.map((menuItem) => (
+                          <FormControlLabel
+                          control={<Switch checked={menuItem.active} onChange={this.handleChange('specialty', menuItem.name)} value={menuItem.name} />}
+                          label={menuItem.name}
+                        />
+                        ))
+                    }
+                  </FormGroup>
+                  <FormLabel component="legend">Wings and Sandwiches</FormLabel>
+                  <FormGroup>
+                    {     
+                        this.state.menu.wingsandsandwiches.map((menuItem) => (
+                          <FormControlLabel
+                          control={<Switch checked={menuItem.active} onChange={this.handleChange('wingsandsandwiches', menuItem.name)} value={menuItem.name} />}
+                          label={menuItem.name}
+                        />
+                        ))
+                    }
+                  </FormGroup>
+                  <FormLabel component="legend">Salads</FormLabel>
+                  <FormGroup>
+                    {     
+                        this.state.menu.salads.map((menuItem) => (
+                          <FormControlLabel
+                          control={<Switch checked={menuItem.active} onChange={this.handleChange('salads', menuItem.name)} value={menuItem.name} />}
+                          label={menuItem.name}
+                        />
+                        ))
+                    }
+                  </FormGroup>
+                  <FormLabel component="legend">Sides</FormLabel>
+                  <FormGroup>
+                    {     
+                        this.state.menu.sides.map((menuItem) => (
+                          <FormControlLabel
+                          control={<Switch checked={menuItem.active} onChange={this.handleChange('sides', menuItem.name)} value={menuItem.name} />}
+                          label={menuItem.name}
+                        />
+                        ))
+                    }
+                  </FormGroup>
+                  <FormLabel component="legend">Pitas</FormLabel>
+                  <FormGroup>
+                    {     
+                        this.state.menu.pitas.map((menuItem) => (
+                          <FormControlLabel
+                          control={<Switch checked={menuItem.active} onChange={this.handleChange('pitas', menuItem.name)} value={menuItem.name} />}
+                          label={menuItem.name}
+                        />
+                        ))
+                    }
+                  </FormGroup>
+                  <FormHelperText>Update when store is closed.</FormHelperText>
+                </FormControl>
+              </Paper>
+            </Grid>
           </Grid>
         </Container>
       </main>
     </div>
     );
   }
+  handleChange = (category, name) => event => {
+    var index = 0;
+    for(var i=0; this.state.menu[category].length; i++){
+      if(this.state.menu[category][i].name == name){
+        console.log(this.state.menu[category][i].name)
+        index = i;
+        break;
+      }
+    }
+    this.setState(prevState => {
+      let menu = Object.assign({}, prevState.menu);               // creating copy of state variable menu
+      menu[category][index].active = !menu[category][index].active; // update the active property              
+      return { menu };                                            // return new object menu object
+    })
+  };
+
   handleDrawerOpen = () => {
     this.setState({
       open: true
@@ -232,6 +366,22 @@ class Dashboard extends React.Component {
   changeButton = (buttonText) => {
     this.setState({ buttonText }); 
   } 
+  submitMenu = () => {
+    this.changeButton('Saving')
+    HTTP.call('POST', 'https://www.ordernapolipizza.ca/api/menu', {
+      data:{
+        menu: this.state.menu
+      }
+    }, (error, result) => {
+      console.log(result)
+      if (!error) {
+        this.changeButton('Saved')
+      }
+      else{
+        this.changeButton('Error: Try Again')
+      }
+    });
+  }
 }
 
 Dashboard.propTypes = {
