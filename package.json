@@ -13,7 +13,7 @@
     "bcrypt": "^3.0.0",
     "history": "^4.9.0",
     "jquery": "^3.4.1",
-    "jquery-validation": "^1.19.1",
+    "jquery-validation": "^1.19.5",
     "meteor-node-stubs": "^0.4.1",
     "query-string": "^6.8.2",
     "react": "^16.8.6",
